@@ -2,13 +2,14 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
-/[Ll]ibrary/
-/[Tt]emp/
-/[Oo]bj/
-/[Bb]uild/
-/[Bb]uilds/
-/[Ll]ogs/
-/[Uu]ser[Ss]ettings/
+UnityApp-DocBot/[Ll]ibrary/
+UnityApp-DocBot/[Tt]emp/
+UnityApp-DocBot/[Oo]bj/
+UnityApp-DocBot/[Bb]uild/
+UnityApp-DocBot/[Bb]uilds/
+UnityApp-DocBot/[Ll]ogs/
+UnityApp-DocBot/[Uu]ser[Ss]ettings/
+UnityApp-DocBot/.idea
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
