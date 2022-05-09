@@ -23,14 +23,20 @@ namespace Objects.DocBot // PROPER HIERARCHY
         private TextMeshProUGUI headerText;
         
         public NavMeshAgent agent { get; set; }
-        
+
+
+        public DocBotDetails docBotDetails;
+
+
+        public int detectionRange = 8;
         
         public Vector3 BrokenBotLocation { get; set; } // save the broken bot location that we are going to repair
         private void Start()
         {
             agent = GetComponent<NavMeshAgent>(); // let's get the NavMeshAgent from the current game object.
 
-
+           
+            
             LoadAllStates();
         }
 
@@ -78,9 +84,9 @@ namespace Objects.DocBot // PROPER HIERARCHY
             stateManager.StateUpdate(); // Update the current state using the Generic State's instance (specific to this FSM)
             
             
+   
             
-            
-            if (Random.Range(0, 9999) < 1) // 1 out of 9999 chance to break (rare chance)
+            if (Random.Range(0, 9999) < 1 && stateManager.GetCurrentStateName() != DocBotTypes.BROKEN) // 1 out of 9999 chance to break (rare chance) and is not alr broken
             {
                 stateManager.ChangeState(DocBotTypes.BROKEN);
             }
@@ -95,7 +101,7 @@ namespace Objects.DocBot // PROPER HIERARCHY
         
         void OnDrawGizmosSelected()
         {
-            Gizmos.DrawWireSphere(transform.position, 5);
+            Gizmos.DrawWireSphere(transform.position, detectionRange);
         }
     }
 

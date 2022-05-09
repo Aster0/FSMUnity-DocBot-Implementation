@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using FSM;
 using UnityEngine;
 
-namespace Objects.DocBot.States.BrokenState // PROPER HIERARCHY (Stores all of DocBot's states)
+namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's states)
 {
     
     public class BrokenState<TNm> : State<TNm> // TNm determines the datatype of the name (key)
@@ -25,17 +25,21 @@ namespace Objects.DocBot.States.BrokenState // PROPER HIERARCHY (Stores all of D
 
             fsm.agent.isStopped = true; // stop the agent from moving immediately. 
             fsm.UpdateDocBotText( GetTypeName().ToString());
+            
+            fsm.docBotDetails.docBotHardware.OnBreakDown(); // call on the on break down event
          
         }
 
         public override void Update()
         {
-           // do nothing on broken
+            // do nothing on broken
         }
 
         public override void Exit()
         {
             base.Exit();
+            
+            Debug.Log(fsm.name + " Exiting BRoken");
         }
 
 

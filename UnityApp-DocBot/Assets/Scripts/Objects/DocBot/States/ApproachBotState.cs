@@ -35,7 +35,20 @@ namespace Objects.DocBot.States.BrokenState // PROPER HIERARCHY (Stores all of D
         public override void Update()
         {
             // do nothing on broken
+
+            if (Vector3.Distance(fsm.transform.position, fsm.
+                    BrokenBotLocation) <= 3) // if the tending bot is near the other bot's location already,
+            {
+                fsm.agent.isStopped = true; // we stop moving.
+
+
+          
+                
+            }
         }
+
+
+  
 
         public override void Exit()
         {

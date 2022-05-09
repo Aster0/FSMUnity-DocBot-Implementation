@@ -12,7 +12,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
         private DocBotFSM fsm;
 
 
-        private const int MAX_ROAM_X = 20, MAX_ROAM_Z = 20, DETECTION_RANGE = 5;
+        private const int MAX_ROAM_X = 20, MAX_ROAM_Z = 20;
 
 
         private bool canMove;
@@ -36,6 +36,8 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
             fsm.UpdateDocBotText( GetTypeName().ToString());
             lastPositionSaved = fsm.transform.position; // updates the current position when it enters into this state.
             canMove = true; // allow this docbot to move
+
+            fsm.docBotDetails.isTended = false; // we can wander, reset tended. 
         }
 
         public override void Update()
@@ -57,7 +59,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
             RaycastHit hit;
 
 
-            Collider[] colliders = Physics.OverlapSphere(fsm.transform.position, DETECTION_RANGE);
+            Collider[] colliders = Physics.OverlapSphere(fsm.transform.position, fsm.detectionRange);
 
 
             
@@ -70,10 +72,12 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
                 {
                     DocBotFSM targetedDocFSM = collider.gameObject.GetComponent<DocBotFSM>();
 
-                    if (targetedDocFSM.stateManager.GetCurrentStateName() == DocBotFSM.DocBotTypes.BROKEN) // check if its broken, then approach. if not dont.
+                    if (targetedDocFSM.stateManager.GetCurrentStateName() == DocBotFSM.DocBotTypes.BROKEN
+                        && !targetedDocFSM.docBotDetails.isTended) // check if its broken, then approach. if not dont.
+                        // and check if its currently tended by another bot, if it is not, we can tend to it.
                     {
                         canMove = false;
-                        Debug.Log("Yes");
+                        targetedDocFSM.docBotDetails.isTended = true; 
 
                         fsm.BrokenBotLocation = collider.transform.position;
                     
