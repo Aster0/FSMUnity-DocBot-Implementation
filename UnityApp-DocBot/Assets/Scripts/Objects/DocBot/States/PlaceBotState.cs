@@ -6,12 +6,12 @@ using UnityEngine;
 namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's states)
 {
     
-    public class ResupplyMaterialsState<TNm> : State<TNm> // TNm determines the datatype of the name (key)
+    public class PlaceBotState<TNm> : State<TNm> // TNm determines the datatype of the name (key)
     {
 
         private DocBotFSM fsm;
         
-        public ResupplyMaterialsState(DocBotFSM fsm, TNm typeName, GenericState<TNm> stateManager) : base(stateManager, typeName) 
+        public PlaceBotState(DocBotFSM fsm, TNm typeName, GenericState<TNm> stateManager) : base(stateManager, typeName) 
         // these variables are assigned
         // in the super class' variables that we can access (as protected and public vars)
         {
@@ -22,26 +22,31 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
         {
     
             base.Enter();
-            
- 
-            fsm.docBotDetails.docBotSupplies.FullResupply(); // resupply
-            
+
+
             fsm.UpdateDocBotText( GetTypeName().ToString());
             
-            fsm.StartCoroutine(fsm.ChangeDelayedState(DocBotFSM.DocBotTypes.RETURN_BOT_LOCATION));
+            fsm.StopCarryingBot(); // place bot, stop carrying
+            
+            fsm.stateManager.ChangeState(DocBotFSM.DocBotTypes.WANDER);
+            // after placing bot down, we go back to wandering..
+            
+ 
 
 
+         
         }
 
         public override void Update()
         {
-           
+            // do nothing on broken
         }
 
         public override void Exit()
         {
             base.Exit();
-      
+            fsm.carryingBot = false; // we stopped carrying when we exit this state.
+
         }
 
 

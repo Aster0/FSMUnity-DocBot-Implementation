@@ -25,6 +25,8 @@ namespace Objects.DocBot // PROPER HIERARCHY
         private TextMeshProUGUI headerText;
         
         public NavMeshAgent agent { get; set; }
+        
+        public bool carryingBot { get; set; }
 
 
         public DocBotDetails docBotDetails;
@@ -44,10 +46,15 @@ namespace Objects.DocBot // PROPER HIERARCHY
             docBotDetails.docBotSupplies.StartAmountResupply(); // resupply on start so the bot has all the components
            
             
+            docBotDetails.docBotHardware.InitiateBatteryPercentage();
+            
             LoadAllStates();
-            
-            
-            
+
+
+            DocBotsManager.Instance.docBotsAlive += 1; // plus one to the total alive.
+
+
+
         }
 
 
@@ -66,7 +73,8 @@ namespace Objects.DocBot // PROPER HIERARCHY
             RESUPPLY_MATERIALS,
             RETURN_BOT_LOCATION,
             RETURN_CHARGE,
-            CHARGE
+            CHARGE,
+            PLACE_BOT
             
         }
     
@@ -129,6 +137,8 @@ namespace Objects.DocBot // PROPER HIERARCHY
             stateManager.AddState(DocBotTypes.CHARGE, new ChargeState<DocBotTypes>(this, 
                 DocBotTypes.CHARGE, stateManager));
             
+            stateManager.AddState(DocBotTypes.PLACE_BOT, new PlaceBotState<DocBotTypes>(this, 
+                DocBotTypes.PLACE_BOT, stateManager));
             
             
             
@@ -146,12 +156,15 @@ namespace Objects.DocBot // PROPER HIERARCHY
             // NOT JUST SPECIFIC STATES.
             
             cooldownDestroy -= Time.deltaTime;
+            
+            
 
             if (cooldownDestroy < 0) // cooldown for destroy so it doesn't always check for the range.
             {
                 if (Random.Range(0, 100) < 10 && stateManager.GetCurrentStateName() != DocBotTypes.BROKEN) //  10% chance to break (rare chance) and is not alr broken
                 {
-                    stateManager.ChangeState(DocBotTypes.BROKEN);
+                    if(DocBotsManager.Instance.docBotsAlive != 1) // if there are more than 1 currently alive doc bots. essentially telling it to not kill the last doc bot.
+                        stateManager.ChangeState(DocBotTypes.BROKEN);
                 }
 
                 cooldownDestroy = 5f; // every 5 seconds, it'll have a random chance of being destroyed.
@@ -182,6 +195,30 @@ namespace Objects.DocBot // PROPER HIERARCHY
         void OnDrawGizmosSelected()
         {
             Gizmos.DrawWireSphere(transform.position, detectionRange);
+        }
+
+
+        public void CarryTargetBot()
+        {
+            if (BrokenBotLocation != null) // double check if its targeting a broken bot
+            {
+                BrokenBotLocation.agent.isStopped = true; // make sure its stopped
+                
+                BrokenBotLocation.transform.SetParent(this.gameObject.transform); // set the broken bot parent to this, so it follows.
+
+                BrokenBotLocation.transform.position =
+                    this.gameObject.transform.position + (this.gameObject.transform.forward * 4.5f ); // * 4.5f so it's a little in front.
+                                                                                                      // transform.forward to get the
+                                                                                                      // blue axis of the robot looking
+                                                                                                      // forward, so carrying is in front.
+                
+            }
+        }
+
+        public void StopCarryingBot()
+        {
+            BrokenBotLocation.transform.SetParent(null); // set to no parents.
+
         }
     }
 

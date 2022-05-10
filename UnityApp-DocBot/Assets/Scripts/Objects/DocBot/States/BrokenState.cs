@@ -27,6 +27,8 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
             fsm.UpdateDocBotText( GetTypeName().ToString());
             
             fsm.docBotDetails.docBotHardware.OnBreakDown(); // call on the on break down event
+            
+            DocBotsManager.Instance.docBotsAlive -= 1; // minus one to the total alive.
 
 
             if (fsm.BrokenBotLocation != null)

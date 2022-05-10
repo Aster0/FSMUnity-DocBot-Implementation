@@ -127,6 +127,11 @@ namespace Objects.DocBot // PROPER HIERARCHY
                 "%targeted_botname%'s display LCD is cracked.. %botname% is now replacing the display LCD now.."
             };
 
+            public void InitiateBatteryPercentage()
+            {
+                batteryPercentage = Random.Range(10, 100); // randomized battery for each doc bot.
+            }
+
 
             public float BatteryReduce(float timeDelta) // reduce battery when the bot is in use. 
             {
@@ -238,6 +243,7 @@ namespace Objects.DocBot // PROPER HIERARCHY
             public bool RepairIssues(string botName, string targetedBot, DocBotFSM.DocBotTypes state, DocBotFSM fsm)
             {
                 bool outOfStock = false;
+                bool outOfBattery = false;
             
                 if (OnTotalFailure(totalFailure))
                 {
@@ -274,6 +280,12 @@ namespace Objects.DocBot // PROPER HIERARCHY
                         
                         
                     }
+
+
+                    if (key.Contains("battery"))
+                    {
+                        outOfBattery = true; // prompt that this bot needs battery and to charge after all repairs.
+                    }
                     
                     
                     
@@ -289,6 +301,17 @@ namespace Objects.DocBot // PROPER HIERARCHY
                 if (OnTotalFailure(totalFailure)) // cheeck if total failure again after doing repairs.
                 {
                     return false; // false means repair failed.
+                }
+
+
+                if (outOfBattery) // if the broke nbot needs to be charged
+                {
+                    // we swap state to returning to charger so we can carry the broken bot over.
+
+                    fsm.carryingBot = true; // prompt that we will now be carrying a bot.
+                    fsm.stateManager.ChangeState(DocBotFSM.DocBotTypes.RETURN_CHARGE);
+
+                    return false; // stop the repair because we still need to charge it before its fully fixed.
                 }
 
 

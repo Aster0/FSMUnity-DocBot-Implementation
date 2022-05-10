@@ -22,12 +22,14 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
         {
     
             base.Enter();
+
+            fsm.agent.isStopped = false; // make sure it can move
             
             fsm.UpdateDocBotText( GetTypeName().ToString());
     
-            if (fsm.BrokenBotLocation != null)
+            if (fsm.BrokenBotLocation != null && !fsm.carryingBot) // also make sure we're not carrying a bot, if so, we're actually still tending.
             {
-                // was tending to a bot when it got broken,
+                // was tending to a bot when it needs charging,
 
                 fsm.BrokenBotLocation.docBotDetails.isTended = false; // we leave the bot untended so it can be tended
                 // by another bot later.
@@ -40,12 +42,35 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
         public override void Update()
         {
 
+            if (fsm.carryingBot) // if we are carrying broken bot
+            {
+                fsm.CarryTargetBot(); // carry the bot
+            }
+
             if (Vector3.Distance(fsm.transform.position, fsm.chargingTransform.position) < 3) // if its nearby 
             {
                 // we can charge.
-                
-                Debug.Log("REACH CHARGING");
-                fsm.stateManager.ChangeState(DocBotFSM.DocBotTypes.CHARGE);
+
+                if (fsm.carryingBot) // if we are carrying broken bot
+                {
+                    
+                    Debug.Log("Broken bot is charging now.");
+                    fsm.BrokenBotLocation.stateManager.ChangeState(DocBotFSM.DocBotTypes.CHARGE);
+                    // we change the broken bot's state to charging so it gets charged.
+                    
+                    
+                    fsm.stateManager.ChangeState(DocBotFSM.DocBotTypes.PLACE_BOT);
+                    // then we can  place the bot down..
+                    
+                    
+                    
+                }
+                else // if we aren't carrying a broken bot, we can charge ourselves (as per FSM)
+                {
+                    Debug.Log("REACH CHARGING");
+                    fsm.stateManager.ChangeState(DocBotFSM.DocBotTypes.CHARGE);
+                }
+              
             }
         }
 

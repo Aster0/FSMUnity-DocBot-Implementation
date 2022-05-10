@@ -39,7 +39,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
     
             base.Enter();
 
-            randomWanderCooldown = Random.Range(1, 3);
+            randomWanderCooldown = Random.Range(1, 5);
             
             fsm.UpdateDocBotText( GetTypeName().ToString());
             lastPositionSaved = fsm.transform.position; // updates the current position when it enters into this state.
@@ -47,6 +47,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
             fsm.agent.isStopped = false; // reset movement for agent.
 
+            fsm.BrokenBotLocation = null; // set it to null because its wandering now, not tending to any broken bots.
 
             fsm.docBotDetails.isTended = false; // make sure isTended is false so when it breaks again,
             // someone will tend (because now we can wander.)
