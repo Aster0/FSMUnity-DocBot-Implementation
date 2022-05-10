@@ -17,6 +17,8 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
         private bool canMove;
 
+        private float timeLastWandered; // time last the bot wandered.
+
 
         private Vector3 lastPositionSaved;
         
@@ -37,7 +39,12 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
             lastPositionSaved = fsm.transform.position; // updates the current position when it enters into this state.
             canMove = true; // allow this docbot to move
 
-            fsm.docBotDetails.isTended = false; // we can wander, reset tended. 
+            fsm.agent.isStopped = false; // reset movement for agent.
+
+
+            fsm.docBotDetails.isTended = false; // make sure isTended is false so when it breaks again,
+            // someone will tend (because now we can wander.)
+
         }
 
         public override void Update()
@@ -46,7 +53,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
             CheckSurroundings();
             
-            Debug.Log("Wandering..");
+           
         }
 
         public override void Exit()
@@ -56,7 +63,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
         private void CheckSurroundings()
         {
-            RaycastHit hit;
+         
 
 
             Collider[] colliders = Physics.OverlapSphere(fsm.transform.position, fsm.detectionRange);
@@ -67,7 +74,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
             foreach (Collider collider in colliders)
             {
                 
-                Debug.Log(collider.tag);
+          
                 if (collider.CompareTag("DocBot") && collider.gameObject != fsm.gameObject) // check if its not itself and it found another docbot
                 {
                     DocBotFSM targetedDocFSM = collider.gameObject.GetComponent<DocBotFSM>();
@@ -79,9 +86,11 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
                         canMove = false;
                         targetedDocFSM.docBotDetails.isTended = true; 
 
-                        fsm.BrokenBotLocation = collider.transform.position;
+                        fsm.BrokenBotLocation = targetedDocFSM;
                     
                         fsm.stateManager.ChangeState(DocBotFSM.DocBotTypes.APPROACH_BOT);
+
+                        break; // break out and only tend to the first bot it sees
                     }
                 
                 }
@@ -96,18 +105,33 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
         private void RandomWander()
         {
-            if (fsm.transform.position.x == lastPositionSaved.x 
-                && fsm.transform.position.z == lastPositionSaved.z && canMove) // check the x and z position if its the same. ignoring the y (because not needed)
-            {
-
-                float randomX = Random.Range(-MAX_ROAM_X, MAX_ROAM_X);
-                float randomZ = Random.Range(-MAX_ROAM_Z, MAX_ROAM_Z);
-
-                lastPositionSaved = new Vector3(randomX, 0, randomZ); // save new position to go to.
-             
-                fsm.agent.SetDestination(lastPositionSaved); // go to the new position using NavMeshAgent.
-            }
             
+            
+
+
+            if (timeLastWandered >= 2) // more than 5 seconds since it just wandered
+            {
+                // we random wander again so its a new location so it doesnt get stuck.
+                Wander();
+            }
+
+            timeLastWandered += Time.deltaTime;
+
+
+        }
+
+        private void Wander()
+        {
+            float randomX = Random.Range(-MAX_ROAM_X, MAX_ROAM_X);
+            float randomZ = Random.Range(-MAX_ROAM_Z, MAX_ROAM_Z);
+
+            lastPositionSaved = new Vector3(randomX, 0, randomZ); // save new position to go to.
+             
+            fsm.agent.SetDestination(lastPositionSaved); // go to the new position using NavMeshAgent.
+
+            timeLastWandered = 0; // reset to 0 cos just wandered
+
+
         }
     }
 

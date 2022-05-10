@@ -6,12 +6,12 @@ using UnityEngine;
 namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's states)
 {
     
-    public class BrokenState<TNm> : State<TNm> // TNm determines the datatype of the name (key)
+    public class ChargeState<TNm> : State<TNm> // TNm determines the datatype of the name (key)
     {
 
         private DocBotFSM fsm;
         
-        public BrokenState(DocBotFSM fsm, TNm typeName, GenericState<TNm> stateManager) : base(stateManager, typeName) 
+        public ChargeState(DocBotFSM fsm, TNm typeName, GenericState<TNm> stateManager) : base(stateManager, typeName) 
         // these variables are assigned
         // in the super class' variables that we can access (as protected and public vars)
         {
@@ -22,26 +22,27 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
         {
     
             base.Enter();
-
-            fsm.agent.isStopped = true; // stop the agent from moving immediately. 
+            
             fsm.UpdateDocBotText( GetTypeName().ToString());
             
-            fsm.docBotDetails.docBotHardware.OnBreakDown(); // call on the on break down event
-
-
-            if (fsm.BrokenBotLocation != null)
-            {
-                // was tending to a bot when it got broken,
-
-                fsm.BrokenBotLocation.docBotDetails.isTended = false; // we leave the bot untended so it can be tended
-                // by another bot later.
-            }
          
         }
 
         public override void Update()
         {
-            // do nothing on broken
+            //  charge
+            
+            if(fsm.docBotDetails.docBotHardware.BatteryCharge(Time.deltaTime) >= 100) // if its 100% already or more (might be more because its a float so just a secure check)
+            {
+
+         
+
+              
+                fsm.stateManager.ChangeState(DocBotFSM.DocBotTypes.WANDER); // back to wandering state.
+                
+
+               
+            }
         }
 
         public override void Exit()
