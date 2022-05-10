@@ -74,7 +74,11 @@ namespace Objects.DocBot // PROPER HIERARCHY
             RETURN_BOT_LOCATION,
             RETURN_CHARGE,
             CHARGE,
-            PLACE_BOT
+            PLACE_BOT,
+            DISMANTLE_BOT,
+            RETURN_RECYCLE,
+            RECYCLE_BOT,
+            DESTROYED
             
         }
     
@@ -141,6 +145,18 @@ namespace Objects.DocBot // PROPER HIERARCHY
                 DocBotTypes.PLACE_BOT, stateManager));
             
             
+            stateManager.AddState(DocBotTypes.DISMANTLE_BOT, new DismantleBotState<DocBotTypes>(this, 
+                DocBotTypes.DISMANTLE_BOT, stateManager));
+            
+            stateManager.AddState(DocBotTypes.RETURN_RECYCLE, new ReturnRecycleState<DocBotTypes>(this, 
+                DocBotTypes.RETURN_RECYCLE, stateManager));
+            
+            stateManager.AddState(DocBotTypes.RECYCLE_BOT, new RecycleBotState<DocBotTypes>(this, 
+                DocBotTypes.RECYCLE_BOT, stateManager));
+            
+            stateManager.AddState(DocBotTypes.DESTROYED, new DestroyedState<DocBotTypes>(this, 
+                DocBotTypes.DESTROYED, stateManager));
+            
             
             stateManager.ChangeState(DocBotTypes.WANDER);
         }
@@ -174,9 +190,10 @@ namespace Objects.DocBot // PROPER HIERARCHY
 
             if (docBotDetails.docBotHardware.BatteryReduce(Time.deltaTime) <= 15 &&
                 stateManager.GetCurrentStateName() != DocBotTypes.CHARGE
-                &&  stateManager.GetCurrentStateName() != DocBotTypes.BROKEN) // reduce battery each time.
+                &&  stateManager.GetCurrentStateName() != DocBotTypes.BROKEN &&
+                stateManager.GetCurrentStateName() != DocBotTypes.DESTROYED) // reduce battery each time.
                                                                           // and check if its under 15%
-                                                                          // and make sure it isnt already charging and not broken
+                                                                          // and make sure it isnt already charging and not broken and not being destroyed.
             {
                 // if so, we change to charging state. THIS WORKS FOR ANY STATE
                 
@@ -219,6 +236,11 @@ namespace Objects.DocBot // PROPER HIERARCHY
         {
             BrokenBotLocation.transform.SetParent(null); // set to no parents.
 
+        }
+
+        public void DestroyThisBot()
+        {
+            Destroy(this.gameObject, 3);
         }
     }
 

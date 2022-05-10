@@ -39,7 +39,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
                 fsm.StartCoroutine(SuccessfulRepair());
             }
      
-            // the bot will move to the scrapping state in the #RepairIssues too.
+            // the bot will move to the dismantle state in the #RepairIssues too.
             // also bringingg to the charging station is in the same method.
 
         }

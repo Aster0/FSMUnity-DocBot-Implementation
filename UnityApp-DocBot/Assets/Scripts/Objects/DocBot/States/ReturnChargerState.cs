@@ -33,6 +33,8 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
                 fsm.BrokenBotLocation.docBotDetails.isTended = false; // we leave the bot untended so it can be tended
                 // by another bot later.
+
+                fsm.BrokenBotLocation = null; // reset as we're no longer tending to anything.
             }
             
             fsm.agent.SetDestination(fsm.chargingTransform.position); // move to the resupply area.

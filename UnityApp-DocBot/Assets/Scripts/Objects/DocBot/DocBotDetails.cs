@@ -92,7 +92,25 @@ namespace Objects.DocBot // PROPER HIERARCHY
                 }
             }
             
+            public void GainSupply(string supplyName)
+            {
+                try // try the block below
+                {
+                    supplies[supplyName] += 1; // plus one from the total supplies left.
+
+                }
+                catch (KeyNotFoundException e) // catch the error
+                    // because those supplies not listed in resupply
+                    // like battery or system_error cause we don't add those.
+                    // and is not found in the dictionary.
+                {
+                    // do nothing
+                }
+            }
+
         }
+        
+        
 
         public class DocBotHardware // the internal of the doc bot, the hardware.
         {
@@ -237,6 +255,20 @@ namespace Objects.DocBot // PROPER HIERARCHY
                 Debug.Log(botName + " "+ state + ": " + targetedBotName + " has these hardware that failed: " + allFailures );
                 
             }
+
+            public void DismantleHardware(DocBotFSM fsm)
+            {
+                foreach (string key in _hardwareStatuses.Keys) // loop through all the hardware statuses
+                {
+                    if (_hardwareStatuses[key]) // if hardware is still working (true)
+                    {
+                        
+                        fsm.docBotDetails.docBotSupplies.GainSupply(key); // gain the hardware that is still working.
+                    }
+
+                 
+                }
+            }
             
             // #RepairIssues is for the tending bot to repair the broken bot's issues.
             // @return false if the repair issues are too severe and can't be fixed. true returns when it can be fixed.
@@ -245,7 +277,7 @@ namespace Objects.DocBot // PROPER HIERARCHY
                 bool outOfStock = false;
                 bool outOfBattery = false;
             
-                if (OnTotalFailure(totalFailure))
+                if (OnTotalFailure(totalFailure, fsm)) // cheeck if total failure.
                 {
                     return false; // false means repair failed.
                 }
@@ -298,7 +330,7 @@ namespace Objects.DocBot // PROPER HIERARCHY
                     
                 }
                 
-                if (OnTotalFailure(totalFailure)) // cheeck if total failure again after doing repairs.
+                if (OnTotalFailure(totalFailure, fsm)) // cheeck if total failure again after doing repairs.
                 {
                     return false; // false means repair failed.
                 }
@@ -322,11 +354,12 @@ namespace Objects.DocBot // PROPER HIERARCHY
                 // if outOfStock is false, negated to true. means repair is a success
             }
             
-            private bool OnTotalFailure(bool totalFailure)
+            private bool OnTotalFailure(bool totalFailure, DocBotFSM fsm)
             {
                 if (totalFailure) // can't be fixed.
                 {
-                    Debug.Log("Can't be fixed, scrapping now.");
+                    fsm.stateManager.ChangeState(DocBotFSM.DocBotTypes.DISMANTLE_BOT); // change itself to wander as well.
+
                     return true; // so return true.
                 }
 

@@ -90,8 +90,10 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
                         && !targetedDocFSM.docBotDetails.isTended) // check if its broken, then approach. if not dont.
                         // and check if its currently tended by another bot, if it is not, we can tend to it.
                     {
+                        
+                        targetedDocFSM.docBotDetails.isTended = true;  // is being tended by this bot.
                         canMove = false;
-                        targetedDocFSM.docBotDetails.isTended = true; 
+                   
 
                         fsm.BrokenBotLocation = targetedDocFSM;
                     

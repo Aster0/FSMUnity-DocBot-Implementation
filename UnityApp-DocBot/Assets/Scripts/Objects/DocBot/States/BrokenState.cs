@@ -37,6 +37,8 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
                 fsm.BrokenBotLocation.docBotDetails.isTended = false; // we leave the bot untended so it can be tended
                 // by another bot later.
+
+                fsm.BrokenBotLocation = null; // reset the broken bot because its broken and no longer tending
             }
          
         }

@@ -32,7 +32,11 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
         {
             //  charge
 
-            if (Vector3.Distance(fsm.transform.position, fsm.chargingTransform.position) < 3) // double check if its actually at the charging station, then we charge.
+
+            RaycastHit hitInfo;
+            bool charger = Physics.Raycast(fsm.transform.position, -fsm.transform.up, out hitInfo);
+            
+            if (hitInfo.transform.gameObject == fsm.chargingTransform.gameObject) // double check if its actually at the charging station, then we charge.
             {
                 
                 if(fsm.docBotDetails.docBotHardware.BatteryCharge(Time.deltaTime) >= 100) // if its 100% already or more (might be more because its a float so just a secure check)
