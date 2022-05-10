@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using FSM;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's states)
 {
@@ -21,6 +23,8 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
 
         private Vector3 lastPositionSaved;
+
+        private int randomWanderCooldown;
         
         public WanderState(DocBotFSM fsm, TNm typeName, GenericState<TNm> stateManager) : base(stateManager, typeName) 
         // these variables are assigned
@@ -35,6 +39,8 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
     
             base.Enter();
 
+            randomWanderCooldown = Random.Range(1, 3);
+            
             fsm.UpdateDocBotText( GetTypeName().ToString());
             lastPositionSaved = fsm.transform.position; // updates the current position when it enters into this state.
             canMove = true; // allow this docbot to move
@@ -105,12 +111,14 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
         private void RandomWander()
         {
-            
-            
 
 
-            if (timeLastWandered >= 2) // more than 5 seconds since it just wandered
+            
+        
+        
+            if (timeLastWandered >= randomWanderCooldown) // in x seconds since it just wandered (randomized so all bots will be wandering differently)
             {
+               
                 // we random wander again so its a new location so it doesnt get stuck.
                 Wander();
             }

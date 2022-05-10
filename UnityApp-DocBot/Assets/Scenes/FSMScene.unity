@@ -1999,6 +1999,10 @@ PrefabInstance:
       value: doc-bot-1
       objectReference: {fileID: 0}
     - target: {fileID: 9202740130768873094, guid: 59c45cf74399a014bb440aa157c6a814, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9202740130768873094, guid: 59c45cf74399a014bb440aa157c6a814, type: 3}
       propertyPath: m_TagString
       value: DocBot
       objectReference: {fileID: 0}
