@@ -23,6 +23,9 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
     
             base.Enter();
             
+            Debug.Log(fsm.docBotId + " - " + DocBotFSM.DocBotTypes.CHARGE + ": Charging battery..");
+
+            
             fsm.UpdateDocBotText( GetTypeName().ToString());
             
          
@@ -59,7 +62,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
         {
             base.Exit();
             
-            Debug.Log(fsm.name + " Exiting BRoken");
+         
         }
 
 

@@ -138,7 +138,7 @@ namespace Objects.DocBot // PROPER HIERARCHY
             // a variety of repair messages possible to happen when it gets repaired.
             private string[] hardwareRepairMessages =
             {
-                "%targeted_botname%'s battery is at 0%... %botname% is now bringing this bot to the charging station..",
+                "%targeted_botname%'s battery is at 0%... %botname% will bring this bot to the charging station..",
                 "%targeted_botname%'s system has an error.. %botname% is now restarting the system..",
                 "%targeted_botname%'s mother board is fried. %botname% is now replacing it now..",
                 "%targeted_botname%'s motor isn't spinning.. %botname% is now replacing the motor now..", 
@@ -252,7 +252,7 @@ namespace Objects.DocBot // PROPER HIERARCHY
                     count++;
                 }
                 
-                Debug.Log(botName + " "+ state + ": " + targetedBotName + " has these hardware that failed: " + allFailures );
+                Debug.Log(botName + " - "+ state + ": " + targetedBotName + " has these hardware that failed: " + allFailures );
                 
             }
 
@@ -335,6 +335,7 @@ namespace Objects.DocBot // PROPER HIERARCHY
                     return false; // false means repair failed.
                 }
 
+                
 
                 if (outOfBattery) // if the broke nbot needs to be charged
                 {

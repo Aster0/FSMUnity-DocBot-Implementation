@@ -16,8 +16,8 @@ namespace Objects.DocBot // PROPER HIERARCHY
     {
 
 
-        [SerializeField]
-        private string docBotId;
+   
+        public string docBotId;
 
         public Transform resupplyTransform, recyclingTransform, chargingTransform, chargingMove;
 
@@ -189,7 +189,8 @@ namespace Objects.DocBot // PROPER HIERARCHY
 
 
             if (docBotDetails.docBotHardware.BatteryReduce(Time.deltaTime) <= 15 &&
-                stateManager.GetCurrentStateName() != DocBotTypes.CHARGE
+                stateManager.GetCurrentStateName() != DocBotTypes.CHARGE 
+                && stateManager.GetCurrentStateName() != DocBotTypes.RETURN_CHARGE 
                 &&  stateManager.GetCurrentStateName() != DocBotTypes.BROKEN &&
                 stateManager.GetCurrentStateName() != DocBotTypes.DESTROYED) // reduce battery each time.
                                                                           // and check if its under 15%
@@ -232,8 +233,25 @@ namespace Objects.DocBot // PROPER HIERARCHY
             }
         }
 
+        public void RemoveBrokenBot()
+        {
+            if (BrokenBotLocation != null && !carryingBot) // also make sure we're not carrying a bot, if so, we're actually still tending.
+            {
+                // was tending to a bot when it needs charging,
+
+
+                BrokenBotLocation.docBotDetails.isTended = false; // we leave the bot untended so it can be tended
+                // by another bot later.
+                
+                StopCarryingBot();
+
+                BrokenBotLocation = null; // reset as we're no longer tending to anything.
+            }
+        }
+
         public void StopCarryingBot()
         {
+     
             BrokenBotLocation.transform.SetParent(null); // set to no parents.
 
         }

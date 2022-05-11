@@ -48,13 +48,13 @@ namespace FSM // PROPER HIERARCHY
         
         public virtual void Enter()  // virtual method to be overridden by sub class, Enter() will be executed when State is entered 
         {
-            Debug.Log("Entering the " + name + " State now!");
+            //Debug.Log("Entering the " + name + " State now!");
         }
         
                 
         public virtual void Exit()  // virtual method to be overridden by sub class, Enter() will be executed when State is exited. 
         {
-            Debug.Log("Exiting the " + name + " State now!");
+            //Debug.Log("Exiting the " + name + " State now!");
         }
 
         #endregion

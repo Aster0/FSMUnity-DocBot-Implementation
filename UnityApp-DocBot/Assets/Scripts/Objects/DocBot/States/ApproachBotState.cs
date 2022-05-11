@@ -23,6 +23,7 @@ namespace Objects.DocBot.States.BrokenState // PROPER HIERARCHY (Stores all of D
     
             base.Enter();
 
+            Debug.Log(fsm.docBotId + " - " + DocBotFSM.DocBotTypes.APPROACH_BOT + ": Approaches the location of an identified broken bot.");
 
       
             fsm.agent.SetDestination(fsm.BrokenBotLocation.transform.position); // move to the broken bot's location to approach

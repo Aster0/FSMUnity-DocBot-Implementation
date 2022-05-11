@@ -23,7 +23,8 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
     
             base.Enter();
 
-        
+            Debug.Log(fsm.docBotId + " - " + DocBotFSM.DocBotTypes.DISMANTLE_BOT + ": Dismantling a broken bot that can't be fixed.");
+
             
             fsm.UpdateDocBotText( GetTypeName().ToString());
 

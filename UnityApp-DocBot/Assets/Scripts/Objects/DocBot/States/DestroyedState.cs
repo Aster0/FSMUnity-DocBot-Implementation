@@ -24,7 +24,8 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
             base.Enter();
 
         
-            
+            Debug.Log(fsm.docBotId + " - " + DocBotFSM.DocBotTypes.DESTROYED + ": Bot is unrepairable (determined by the repairing doc-bot) - if it's destroyed, meaning the other doc-bot recycled this broken bot.");
+
             fsm.UpdateDocBotText( GetTypeName().ToString());
             
             

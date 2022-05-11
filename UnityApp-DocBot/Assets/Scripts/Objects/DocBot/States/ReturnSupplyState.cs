@@ -23,6 +23,9 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
     
             base.Enter();
 
+            Debug.Log(fsm.docBotId + " - " + DocBotFSM.DocBotTypes.RETURN_SUPPLY + ": Returning to the supply shack.");
+
+            
             fsm.agent.isStopped = false; // let it move to the resupply zone.
             
             fsm.UpdateDocBotText( GetTypeName().ToString());

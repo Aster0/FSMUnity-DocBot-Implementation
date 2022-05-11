@@ -22,11 +22,12 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
         public override void Enter()
         {
     
+            
             Debug.Log(fsm.name + " " + DocBotFSM.DocBotTypes.DIAGNOSE_BOT + ": Diagnosing a broken bot");
 
             fsm.UpdateDocBotText( GetTypeName().ToString());
 
-            fsm.BrokenBotLocation.docBotDetails.docBotHardware.DiagnoseIssue(fsm.name,
+            fsm.BrokenBotLocation.docBotDetails.docBotHardware.DiagnoseIssue(fsm.docBotId,
                 fsm.BrokenBotLocation.name, DocBotFSM.DocBotTypes.DIAGNOSE_BOT);
 
             fsm.StartCoroutine(fsm.ChangeDelayedState(DocBotFSM.DocBotTypes.REPAIR_BOT));

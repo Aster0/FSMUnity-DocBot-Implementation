@@ -21,6 +21,9 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
         public override void Enter()
         {
     
+            Debug.Log(fsm.docBotId + " - " + DocBotFSM.DocBotTypes.BROKEN + ": Broken.. Waiting for a doc-bot to perform diagnostics on it.");
+
+            
             base.Enter();
 
             fsm.agent.isStopped = true; // stop the agent from moving immediately. 
@@ -31,15 +34,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
             DocBotsManager.Instance.docBotsAlive -= 1; // minus one to the total alive.
 
 
-            if (fsm.BrokenBotLocation != null)
-            {
-                // was tending to a bot when it got broken,
-
-                fsm.BrokenBotLocation.docBotDetails.isTended = false; // we leave the bot untended so it can be tended
-                // by another bot later.
-
-                fsm.BrokenBotLocation = null; // reset the broken bot because its broken and no longer tending
-            }
+            fsm.RemoveBrokenBot();
          
         }
 
@@ -52,7 +47,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
         {
             base.Exit();
             
-            Debug.Log(fsm.name + " Exiting BRoken");
+       
         }
 
 

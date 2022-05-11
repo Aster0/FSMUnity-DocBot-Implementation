@@ -23,6 +23,9 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
     
             base.Enter();
             
+            Debug.Log(fsm.docBotId + " - " + DocBotFSM.DocBotTypes.RETURN_BOT_LOCATION + ": Returning to broken bot's location.");
+
+            
             fsm.UpdateDocBotText( GetTypeName().ToString());
 
             fsm.agent.SetDestination(fsm.BrokenBotLocation.transform.position);

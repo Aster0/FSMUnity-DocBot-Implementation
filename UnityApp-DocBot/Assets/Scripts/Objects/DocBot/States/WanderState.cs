@@ -38,6 +38,9 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
             
     
             base.Enter();
+            
+            
+            Debug.Log(fsm.docBotId + " - " + DocBotFSM.DocBotTypes.WANDER + ": Wanders around the field, finding broken bots.");
 
             randomWanderCooldown = Random.Range(1, 5);
             
@@ -47,8 +50,10 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
             fsm.agent.isStopped = false; // reset movement for agent.
 
-            fsm.BrokenBotLocation = null; // set it to null because its wandering now, not tending to any broken bots.
+            fsm.carryingBot = false; // make sure we stop carrying any bots when we're wandering
 
+            fsm.RemoveBrokenBot(); // make sure we stop carrying and reset values.
+            
             fsm.docBotDetails.isTended = false; // make sure isTended is false so when it breaks again,
             // someone will tend (because now we can wander.)
 

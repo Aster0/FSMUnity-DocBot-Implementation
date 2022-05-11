@@ -26,18 +26,23 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
       
             fsm.UpdateDocBotText( GetTypeName().ToString());
 
+            Debug.Log(fsm.docBotId + " - " + DocBotFSM.DocBotTypes.REPAIR_BOT + ": Attempts to perform repairs on a broken bot.");
 
-       
 
-            if (fsm.BrokenBotLocation.docBotDetails.docBotHardware.RepairIssues(fsm.name,
-                    fsm.BrokenBotLocation.name, DocBotFSM.DocBotTypes.REPAIR_BOT, fsm)) // check if repair will be successful
-            // note that the transition to the RETURN_RESUPPLY state is checked in the method above (#RepairIssues)
-            
+
+            if (fsm.BrokenBotLocation != null) // null check
             {
-                // can be fixed
+                if (fsm.BrokenBotLocation.docBotDetails.docBotHardware.RepairIssues(fsm.name,
+                        fsm.BrokenBotLocation.name, DocBotFSM.DocBotTypes.REPAIR_BOT, fsm)) // check if repair will be successful
+                    // note that the transition to the RETURN_RESUPPLY state is checked in the method above (#RepairIssues)
+            
+                {
+                    // can be fixed
 
-                fsm.StartCoroutine(SuccessfulRepair());
+                    fsm.StartCoroutine(SuccessfulRepair());
+                }
             }
+
      
             // the bot will move to the dismantle state in the #RepairIssues too.
             // also bringingg to the charging station is in the same method.

@@ -23,10 +23,13 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
     
             base.Enter();
 
+            Debug.Log(fsm.docBotId + " - " + DocBotFSM.DocBotTypes.PLACE_BOT + ": Placing the broken bot down on the charging pad for it to charge.");
+
 
             fsm.UpdateDocBotText( GetTypeName().ToString());
             
             fsm.StopCarryingBot(); // place bot, stop carrying
+         
             
             fsm.stateManager.ChangeState(DocBotFSM.DocBotTypes.WANDER);
             // after placing bot down, we go back to wandering..

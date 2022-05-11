@@ -22,22 +22,25 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
         {
     
             base.Enter();
+            
+            Debug.Log(fsm.docBotId + " - " + DocBotFSM.DocBotTypes.RETURN_CHARGE + ": Returning to the charger pad's location.");
+
 
             fsm.agent.isStopped = false; // make sure it can move
             
             fsm.UpdateDocBotText( GetTypeName().ToString());
     
-            if (fsm.BrokenBotLocation != null && !fsm.carryingBot) // also make sure we're not carrying a bot, if so, we're actually still tending.
-            {
-                // was tending to a bot when it needs charging,
-
-                fsm.BrokenBotLocation.docBotDetails.isTended = false; // we leave the bot untended so it can be tended
-                // by another bot later.
-
-                fsm.BrokenBotLocation = null; // reset as we're no longer tending to anything.
-            }
+            fsm.RemoveBrokenBot();
             
             fsm.agent.SetDestination(fsm.chargingTransform.position); // move to the resupply area.
+
+            if (fsm.carryingBot)
+            {
+                // if its carrying a bot, meaning we are planning to put this bot at the charging station,
+                // and it's actually already repaired so just put it to alive.
+                DocBotsManager.Instance.docBotsAlive += 1; // plus one to the total alive as the docbot 
+ 
+            }
          
         }
 
@@ -46,6 +49,16 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
             if (fsm.carryingBot) // if we are carrying broken bot
             {
+
+                if (fsm.BrokenBotLocation.docBotDetails.docBotHardware.totalFailure) // if its total failure broken bot
+                {
+                    // we are actually meant to charge ourselves and not the bot, its just a coincidence
+                    // that we're otw to the recycling center and this bot ran out of battery.
+                    // so we shouldn't bring the broken bot to the charging station with us.
+                    fsm.carryingBot = false;
+                    fsm.RemoveBrokenBot();
+                }
+                
                 fsm.CarryTargetBot(); // carry the bot
             }
 
@@ -69,7 +82,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
                 }
                 else // if we aren't carrying a broken bot, we can charge ourselves (as per FSM)
                 {
-                    Debug.Log("REACH CHARGING");
+                   
                     fsm.stateManager.ChangeState(DocBotFSM.DocBotTypes.CHARGE);
                 }
               

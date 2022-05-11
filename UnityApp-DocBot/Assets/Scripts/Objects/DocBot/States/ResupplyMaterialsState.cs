@@ -23,7 +23,8 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
     
             base.Enter();
             
- 
+            Debug.Log(fsm.docBotId + " - " + DocBotFSM.DocBotTypes.RESUPPLY_MATERIALS + ": Resupplying repair materials.");
+
             fsm.docBotDetails.docBotSupplies.FullResupply(); // resupply
             
             fsm.UpdateDocBotText( GetTypeName().ToString());
