@@ -27,6 +27,8 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
             
             base.Enter();
+            
+            fsm.ChangeColor(Color.red); // red for broken
 
             fsm.agent.isStopped = true; // stop the agent from moving immediately. 
             fsm.UpdateDocBotText( GetTypeName().ToString());

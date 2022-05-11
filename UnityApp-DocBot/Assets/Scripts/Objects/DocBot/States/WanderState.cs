@@ -39,6 +39,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
     
             base.Enter();
             
+            fsm.ChangeColor(Color.green); // green for working. when it hits wandering, means its working always.
             
             Debug.Log(fsm.docBotId + " - " + DocBotFSM.DocBotTypes.WANDER + ": Wanders around the field, finding broken bots.");
 

@@ -30,6 +30,17 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
 
 
+            fsm.StartCoroutine(BeginRepair());
+
+     
+            // the bot will move to the dismantle state in the #RepairIssues too.
+            // also bringingg to the charging station is in the same method.
+
+        }
+
+        private IEnumerator BeginRepair()
+        {
+            yield return new WaitForSeconds(2);
             if (fsm.BrokenBotLocation != null) // null check
             {
                 if (fsm.BrokenBotLocation.docBotDetails.docBotHardware.RepairIssues(fsm.name,
@@ -42,11 +53,6 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
                     fsm.StartCoroutine(SuccessfulRepair());
                 }
             }
-
-     
-            // the bot will move to the dismantle state in the #RepairIssues too.
-            // also bringingg to the charging station is in the same method.
-
         }
 
 

@@ -29,7 +29,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
             fsm.UpdateDocBotText( GetTypeName().ToString());
             
             
-            
+            DocBotsManager.Instance.docBotsAlive -= 1; // minus one to the total alive.
 
             fsm.DestroyThisBot(); // destroy the bot in a few seconds.
 

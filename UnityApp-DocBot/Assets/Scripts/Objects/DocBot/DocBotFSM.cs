@@ -38,12 +38,15 @@ namespace Objects.DocBot // PROPER HIERARCHY
 
 
         public int detectionRange = 8;
+
+        private MeshRenderer _renderer;
         
         public DocBotFSM BrokenBotLocation { get; set; } // save the broken bot FSM that we are going to repair
+        
         private void Start()
         {
             agent = GetComponent<NavMeshAgent>(); // let's get the NavMeshAgent from the current game object.
-
+            _renderer = GetComponent<MeshRenderer>();
             
             docBotDetails.docBotSupplies.StartAmountResupply(); // resupply on start so the bot has all the components
            
@@ -58,6 +61,8 @@ namespace Objects.DocBot // PROPER HIERARCHY
 
 
         }
+        
+        
 
 
 
@@ -207,6 +212,10 @@ namespace Objects.DocBot // PROPER HIERARCHY
 
 
 
+        public void ChangeColor(Color color)
+        {
+            _renderer.material.color = color;
+        }
         public void UpdateDocBotText(string currentStateType)
         {
             headerText.text = docBotId + " : " + currentStateType;
