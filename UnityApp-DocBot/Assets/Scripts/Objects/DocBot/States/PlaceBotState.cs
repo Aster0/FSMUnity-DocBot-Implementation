@@ -28,10 +28,9 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
             fsm.UpdateDocBotText( GetTypeName().ToString());
             
-            fsm.StopCarryingBot(); // place bot, stop carrying
          
             
-            fsm.stateManager.ChangeState(DocBotFSM.DocBotTypes.WANDER);
+            fsm.stateManager.ChangeState(DocBotFSM.DocBotTypes.MACHINE_REPAIR);
             // after placing bot down, we go back to wandering..
             
  

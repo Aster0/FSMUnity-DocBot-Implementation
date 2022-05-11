@@ -114,7 +114,7 @@ namespace Objects.DocBot // PROPER HIERARCHY
 
         public class DocBotHardware // the internal of the doc bot, the hardware.
         {
-            private float batteryPercentage = 100; // battery %% that the bot is left with.
+            private float durability = 100; // battery %% that the bot is left with.
             
             private Dictionary<String, bool> _hardwareStatuses = new Dictionary<string, bool>();
             
@@ -138,26 +138,26 @@ namespace Objects.DocBot // PROPER HIERARCHY
             // a variety of repair messages possible to happen when it gets repaired.
             private string[] hardwareRepairMessages =
             {
-                "%targeted_botname%'s battery is at 0%... %botname% will bring this bot to the charging station..",
+                "%targeted_botname%'s battery is broken... %botname% will bring this bot to the workshop for advanced repairs at the workshop",
                 "%targeted_botname%'s system has an error.. %botname% is now restarting the system..",
                 "%targeted_botname%'s mother board is fried. %botname% is now replacing it now..",
                 "%targeted_botname%'s motor isn't spinning.. %botname% is now replacing the motor now..", 
                 "%targeted_botname%'s display LCD is cracked.. %botname% is now replacing the display LCD now.."
             };
 
-            public void InitiateBatteryPercentage()
+            public void InitiateDurabilityPercentage()
             {
-                batteryPercentage = Random.Range(10, 100); // randomized battery for each doc bot.
+                durability = Random.Range(10, 100); // randomized durability for each doc bot.
             }
 
 
-            public float BatteryReduce(float timeDelta) // reduce battery when the bot is in use. 
+            public float DurabilityReduce(float timeDelta) // reduce durability when the bot is in use. 
             {
-                batteryPercentage -= (timeDelta / Random.Range(1, 5)) * 2; 
+                durability -= (timeDelta / Random.Range(1, 5)) * 2; 
                 
      
 
-                return batteryPercentage;
+                return durability;
                 // timeDelta to make it so it goes along with each update frame.
                 // random from 1 to 10, to multiply like a multiplier (how fast it actually reduces each frame)
 
@@ -165,15 +165,15 @@ namespace Objects.DocBot // PROPER HIERARCHY
 
             }
 
-            public float BatteryCharge(float timeDelta)
+            public float DurabilityGain(float timeDelta)
             {
-                batteryPercentage += Random.Range(15, 30) * timeDelta; 
+                durability += Random.Range(15, 30) * timeDelta; 
                 
              
 
-                return batteryPercentage;
+                return durability;
 
-                // more than reduce because charging should be faster
+                // more than reduce because repair should be faster
                 // timeDelta to make it so it goes along with each update frame.
                 // random from 15 to 30, to multiply like a multiplier (how fast it actually charges each frame)
             }
@@ -275,7 +275,7 @@ namespace Objects.DocBot // PROPER HIERARCHY
             public bool RepairIssues(string botName, string targetedBot, DocBotFSM.DocBotTypes state, DocBotFSM fsm)
             {
                 bool outOfStock = false;
-                bool outOfBattery = false;
+                bool brokenBattery = false;
             
                 if (OnTotalFailure(totalFailure, fsm)) // cheeck if total failure.
                 {
@@ -316,7 +316,7 @@ namespace Objects.DocBot // PROPER HIERARCHY
 
                     if (key.Contains("battery"))
                     {
-                        outOfBattery = true; // prompt that this bot needs battery and to charge after all repairs.
+                        brokenBattery = true; // prompt that this bot needs an advanced repair at the workshop as battery is broken
                     }
                     
                     
@@ -337,12 +337,12 @@ namespace Objects.DocBot // PROPER HIERARCHY
 
                 
 
-                if (outOfBattery) // if the broke nbot needs to be charged
+                if (brokenBattery) // if the broke nbot needs to be charged
                 {
                     // we swap state to returning to charger so we can carry the broken bot over.
 
                     fsm.carryingBot = true; // prompt that we will now be carrying a bot.
-                    fsm.stateManager.ChangeState(DocBotFSM.DocBotTypes.RETURN_CHARGE);
+                    fsm.stateManager.ChangeState(DocBotFSM.DocBotTypes.RETURN_WORKSHOP);
 
                     return false; // stop the repair because we still need to charge it before its fully fixed.
                 }

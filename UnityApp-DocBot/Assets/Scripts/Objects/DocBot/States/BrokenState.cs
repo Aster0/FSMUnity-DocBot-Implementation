@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using FSM;
+using UnityEditor;
 using UnityEngine;
 
 namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's states)
@@ -20,8 +21,9 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
         public override void Enter()
         {
-    
-            Debug.Log(fsm.docBotId + " - " + DocBotFSM.DocBotTypes.BROKEN + ": Broken.. Waiting for a doc-bot to perform diagnostics on it.");
+
+            
+            Debug.Log(fsm.docBotId + " - " + DocBotFSM.DocBotTypes.BROKEN + ": Bot broke down.. Waiting for a doc-bot to perform diagnostics on it.");
 
             
             base.Enter();

@@ -7,6 +7,7 @@ using Objects.DocBot.States.BrokenState;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 
@@ -19,7 +20,8 @@ namespace Objects.DocBot // PROPER HIERARCHY
    
         public string docBotId;
 
-        public Transform resupplyTransform, recyclingTransform, chargingTransform, chargingMove;
+        public Transform resupplyTransform, recyclingTransform, workshopTransform;
+
 
         [SerializeField]
         private TextMeshProUGUI headerText;
@@ -46,7 +48,7 @@ namespace Objects.DocBot // PROPER HIERARCHY
             docBotDetails.docBotSupplies.StartAmountResupply(); // resupply on start so the bot has all the components
            
             
-            docBotDetails.docBotHardware.InitiateBatteryPercentage();
+            docBotDetails.docBotHardware.InitiateDurabilityPercentage();
             
             LoadAllStates();
 
@@ -72,8 +74,8 @@ namespace Objects.DocBot // PROPER HIERARCHY
             RETURN_SUPPLY,
             RESUPPLY_MATERIALS,
             RETURN_BOT_LOCATION,
-            RETURN_CHARGE,
-            CHARGE,
+            RETURN_WORKSHOP,
+            MACHINE_REPAIR,
             PLACE_BOT,
             DISMANTLE_BOT,
             RETURN_RECYCLE,
@@ -135,11 +137,11 @@ namespace Objects.DocBot // PROPER HIERARCHY
             stateManager.AddState(DocBotTypes.RETURN_BOT_LOCATION, new ReturnBotLocationState<DocBotTypes>(this, 
                 DocBotTypes.RETURN_BOT_LOCATION, stateManager));
             
-            stateManager.AddState(DocBotTypes.RETURN_CHARGE, new ReturnChargerState<DocBotTypes>(this, 
-                DocBotTypes.RETURN_CHARGE, stateManager));
+            stateManager.AddState(DocBotTypes.RETURN_WORKSHOP, new ReturnWorkshopState<DocBotTypes>(this, 
+                DocBotTypes.RETURN_WORKSHOP, stateManager));
             
-            stateManager.AddState(DocBotTypes.CHARGE, new ChargeState<DocBotTypes>(this, 
-                DocBotTypes.CHARGE, stateManager));
+            stateManager.AddState(DocBotTypes.MACHINE_REPAIR, new MachineRepairState<DocBotTypes>(this, 
+                DocBotTypes.MACHINE_REPAIR, stateManager));
             
             stateManager.AddState(DocBotTypes.PLACE_BOT, new PlaceBotState<DocBotTypes>(this, 
                 DocBotTypes.PLACE_BOT, stateManager));
@@ -188,17 +190,17 @@ namespace Objects.DocBot // PROPER HIERARCHY
             }
 
 
-            if (docBotDetails.docBotHardware.BatteryReduce(Time.deltaTime) <= 15 &&
-                stateManager.GetCurrentStateName() != DocBotTypes.CHARGE 
-                && stateManager.GetCurrentStateName() != DocBotTypes.RETURN_CHARGE 
+            if (docBotDetails.docBotHardware.DurabilityReduce(Time.deltaTime) <= 15 &&
+                stateManager.GetCurrentStateName() != DocBotTypes.MACHINE_REPAIR 
+                && stateManager.GetCurrentStateName() != DocBotTypes.RETURN_WORKSHOP 
                 &&  stateManager.GetCurrentStateName() != DocBotTypes.BROKEN &&
-                stateManager.GetCurrentStateName() != DocBotTypes.DESTROYED) // reduce battery each time.
+                stateManager.GetCurrentStateName() != DocBotTypes.DESTROYED) // reduce durability each time.
                                                                           // and check if its under 15%
                                                                           // and make sure it isnt already charging and not broken and not being destroyed.
             {
                 // if so, we change to charging state. THIS WORKS FOR ANY STATE
                 
-                stateManager.ChangeState(DocBotTypes.RETURN_CHARGE); // return to charger.
+                stateManager.ChangeState(DocBotTypes.RETURN_WORKSHOP); // return to charger.
             }
         
         }
