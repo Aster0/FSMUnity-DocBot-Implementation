@@ -57,7 +57,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
             
             fsm.docBotDetails.isTended = false; // make sure isTended is false so when it breaks again,
             // someone will tend (because now we can wander.)
-
+      
         }
 
         public override void Update()

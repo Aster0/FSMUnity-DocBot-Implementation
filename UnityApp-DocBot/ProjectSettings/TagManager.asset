@@ -4,7 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - DocBot
+  - Bot
   layers:
   - Default
   - TransparentFX
