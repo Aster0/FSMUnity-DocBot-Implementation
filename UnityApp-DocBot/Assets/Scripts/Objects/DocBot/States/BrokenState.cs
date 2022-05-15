@@ -28,7 +28,9 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
             
             base.Enter();
             
-            
+            if(fsm.BrokenBotLocation != null) // if we are tending to a broken bot
+                fsm.BrokenBotDetails.isTended = false; // we leave the bot untended so it can be tended
+                // by another bot later.
             
             fsm.StopCarryingBot();
             

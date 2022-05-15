@@ -95,6 +95,12 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
                     GenericStateManager targetedDocFSM = collider.gameObject.GetComponent<GenericStateManager>();
 
                     DocBotDetails brokenBotDetails = targetedDocFSM.GetComponent<DocBotDetails>();
+                    
+                    // note that the doc bot can approach ANY BOTS that extends the GenericStateManager. 
+                    // This is because it's so generic that the doc-bot can repair all other bots. 
+                    // So, I have made a Random Bot in the scene for this proof of concept to work, u can see that
+                    // it works fabulously and that the doc-bot can also access the other bot's FSM by accessing the 
+                    // generic state manager to change its state, thus, repairing it when needed.
 
                     if (targetedDocFSM.GetCurrentStateName().Equals("BROKEN")
                         && !brokenBotDetails.isTended) // check if its broken, then approach. if not dont.

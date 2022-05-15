@@ -34,13 +34,15 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
             
             fsm.carryingBot = true;  // we will start carrying the bot.
             
-            fsm.StartCoroutine(fsm.ChangeDelayedState("RETURN_RECYCLE"));
+            fsm.StartCoroutine(fsm.ChangeDelayedState("RETURN_RECYCLE", "DISMANTLE_BOT"));
             // delay a state change to return to recycle.)
 
           
             
 
         }
+
+      
 
         public override void Update()
         {

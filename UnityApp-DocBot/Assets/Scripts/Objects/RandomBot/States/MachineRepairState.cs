@@ -25,7 +25,7 @@ namespace Objects.RandomBot.States // PROPER HIERARCHY (Stores all of DocBot's s
             base.Enter();
             
             fsm.ChangeColor(Color.green);
-            fsm.UpdateDocBotText( "REPAIRED"); // do nothing except show that its been repaired by a doc-bot
+            fsm.UpdateDocBotText( "MACHINE_REPAIR"); // do nothing except show that its been repaired by a doc-bot
         }
     }
 }

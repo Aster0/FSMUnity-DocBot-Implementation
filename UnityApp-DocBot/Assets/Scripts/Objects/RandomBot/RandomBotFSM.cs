@@ -7,7 +7,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class RandomBotFSM : GenericStateManager
+public class RandomBotFSM : GenericStateManager // extending GenericStateManager so DocBotFSM can be classified under GenericStateManager datatype. Makes it easier for us to detect bots that can be repaired.
+    // extending also creates a new instance of GenericStateManager, thus, all specific FSM will tie to a new instance of the GenericStateManager.
 {
     
     // NOTE THAT THIS BOT IS ONLY MADE FOR A PROOF OF CONCEPT THAT THE DOC-BOT CAN INTERACT

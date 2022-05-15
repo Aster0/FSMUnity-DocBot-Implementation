@@ -13,7 +13,8 @@ using Random = UnityEngine.Random;
 
 namespace Objects.DocBot // PROPER HIERARCHY
 {
-    public class DocBotFSM : GenericStateManager
+    public class DocBotFSM : GenericStateManager // extending GenericStateManager so DocBotFSM can be classified under GenericStateManager datatype. Makes it easier for us to detect bots that can be repaired.
+    // extending also creates a new instance of GenericStateManager, thus, all specific FSM will tie to a new instance of the GenericStateManager.
     {
 
         
@@ -133,6 +134,24 @@ namespace Objects.DocBot // PROPER HIERARCHY
            
         }
         
+        // overloaded method
+        public IEnumerator ChangeDelayedState(string state, string currentState)
+        {
+     
+
+         
+            yield return new WaitForSeconds(2); // wait 2 seconds to change states after diagnosing
+            // so it's more realistic as diagnostics doesn't take instantly in real life.
+
+ 
+            if (!stateManager.GetCurrentStateName().Equals("BROKEN") && currentState == stateManager.GetCurrentStateName()) // make sure when after we wait 2 seconds, the state didnt change to broken.
+                // if not, we don't want to change state anymore. also check if the current state is still current state and has not moved on, then we run change state.
+            {
+                stateManager.ChangeState(state);
+            }
+           
+        }
+        
         
         private void LoadAllStates()
         {
@@ -210,7 +229,7 @@ namespace Objects.DocBot // PROPER HIERARCHY
                         stateManager.ChangeState("BROKEN");
                 }
 
-                cooldownDestroy = 5f; // every 5 seconds, it'll have a random chance of being destroyed.
+                cooldownDestroy = 7f; // every 7 seconds, it'll have a random chance of being destroyed.
                 // enough time for them to do things like repairing, etc
             }
 
@@ -287,7 +306,13 @@ namespace Objects.DocBot // PROPER HIERARCHY
             if (carryingBot)
             {
                 BrokenBotLocation.transform.SetParent(null); // set to no parents.
+          
+          
+                BrokenBotLocation = null; // reset as we're no longer tending to anything.
+                
                 carryingBot = false; // stop carrying
+                
+       
             }
 
         }

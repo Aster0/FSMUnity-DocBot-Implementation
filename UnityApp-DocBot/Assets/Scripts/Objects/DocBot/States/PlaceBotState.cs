@@ -47,7 +47,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
         public override void Exit()
         {
             base.Exit();
-            fsm.carryingBot = false; // we stopped carrying when we exit this state.
+           
 
         }
 

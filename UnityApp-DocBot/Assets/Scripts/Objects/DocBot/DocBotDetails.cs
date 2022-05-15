@@ -291,11 +291,15 @@ namespace Objects.DocBot // PROPER HIERARCHY
                     {
                         // if no stock, we
                         // resupply.
-                        
-                        fsm.stateManager.ChangeState("RETURN_SUPPLY");
 
-                        outOfStock = true;
-                        break; // break out of iteration
+                        if (!fsm.GetCurrentStateName().Equals("BROKEN")) // if its not changed to broken
+                        {
+                            fsm.stateManager.ChangeState("RETURN_SUPPLY");
+
+                            outOfStock = true;
+                            break; // break out of iteration
+                        }
+                   
                         
                         
                     }

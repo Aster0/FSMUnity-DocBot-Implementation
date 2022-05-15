@@ -22,8 +22,17 @@ namespace Objects.DocBot // PROPER HIERARCHY
             }
         }
 
-
-
+        public void Update()
+        {
+            docBotsAlive = 0;
+            foreach (DocBotFSM doc in GameObject.FindObjectsOfType<DocBotFSM>())
+            {
+                if (!doc.GetCurrentStateName().Equals("BROKEN"))
+                {
+                    docBotsAlive += 1;
+                }
+            }
+        }
     }
 }
 

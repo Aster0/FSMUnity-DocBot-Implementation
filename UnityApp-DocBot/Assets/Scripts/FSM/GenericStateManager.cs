@@ -7,14 +7,22 @@ using UnityEngine;
 namespace FSM // PROPER HIERARCHY
 {
     
-    public class GenericStateManager: MonoBehaviour // note that it's not implementing MonoBehavior because each 
-    // specific FSM (e.g. DocBotFSM) will need a new instance of GenericState as to get a new dictionary with its corresponding
+    public class GenericStateManager: MonoBehaviour // note that t here is monobehavior here because the specific FSM like DocBotFSM will extend GenericStateManager, thus, getting MonoBehavior too.
+        // the reason why DocBotFSM will extend this Monobehavior is so DocBotFSM can also be classified under a generic datatype which is GenericStateManager. So can all repairable bots be classified under this datatype.
+        // so the repairing doc-bot can get GetComponent<GenericStateManager>() to repair other bots that are NOT doc-bots.
+    // specific FSM (e.g. DocBotFSM) will need a new instance of GenericState as to get a new dictionary with its corresponding (new instance is created when extending)
     // State's instances.
 
     // TNm means Type Name. Generic Datatype for whatever we want to define each state as for keys.
     {   
 
         private Dictionary<string, FSM.State> states = new Dictionary<string, FSM.State>();
+        // the reason why I made the key a string instead of an enum (initially i made it an enum) 
+        // is because, so it can work with other b ots that the doc-bot wants to repair.
+        // the doc-bot that wants to repair can just call a specific state of the other bot to change it
+        // from BROKEN state to something else. It's better this way. 
+        // it was a generic state before but had issues because different specific FSMs will have different way of calling the states
+        // so it provided lots of issues with making an interconnected system between the doc-bot and the other bots.
         
         public FSM.State CurrentState { get; set; }
 

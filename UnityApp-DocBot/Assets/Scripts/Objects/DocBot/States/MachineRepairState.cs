@@ -45,7 +45,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
                 if (fsm.carryingBot) // if carrying bot to do advanced repairs at the workshop,
                 {
-                    DoAdvancedRepairs();
+                    fsm.StartCoroutine(DoAdvancedRepairs());
                 }
                 else // if not, maintenance on itself by increasing its own durability so it doesn't break that easily.
                 {
@@ -70,9 +70,11 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
         {
             yield return new WaitForSeconds(3);
             
-            fsm.StopCarryingBot(); // place bot, stop carrying because repairs are done.
+      
             fsm.BrokenBotLocation.ChangeState("WANDER");
             fsm.stateManager.ChangeState("WANDER");
+            
+            fsm.StopCarryingBot(); // place bot, stop carrying because repairs are done.
         }
 
         public override void Exit()
