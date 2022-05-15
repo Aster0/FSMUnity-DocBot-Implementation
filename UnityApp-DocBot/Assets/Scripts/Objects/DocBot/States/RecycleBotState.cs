@@ -6,12 +6,12 @@ using UnityEngine;
 namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's states)
 {
     
-    public class RecycleBotState<TNm> : State<TNm> // TNm determines the datatype of the name (key)
+    public class RecycleBotState : State // TNm determines the datatype of the name (key)
     {
 
         private DocBotFSM fsm;
         
-        public RecycleBotState(DocBotFSM fsm, TNm typeName, GenericState<TNm> stateManager) : base(stateManager, typeName) 
+        public RecycleBotState(DocBotFSM fsm, string typeName, GenericStateManager stateManager) : base(stateManager, typeName) 
         // these variables are assigned
         // in the super class' variables that we can access (as protected and public vars)
         {
@@ -32,10 +32,10 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
             
             
 
-            fsm.BrokenBotLocation.stateManager.ChangeState(DocBotFSM.DocBotTypes.DESTROYED); // change to destroyed
+            fsm.BrokenBotLocation.ChangeState("DESTROYED"); // change to destroyed
             // cos its recycled.
 
-            fsm.StartCoroutine(fsm.ChangeDelayedState(DocBotFSM.DocBotTypes.WANDER)); 
+            fsm.StartCoroutine(fsm.ChangeDelayedState("WANDER")); 
             // delay to a wander state as its recycling. 
 
 

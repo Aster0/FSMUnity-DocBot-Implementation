@@ -7,12 +7,12 @@ using UnityEngine;
 namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's states)
 {
     
-    public class DiagnoseBotState<TNm> : State<TNm> // TNm determines the datatype of the name (key)
+    public class DiagnoseBotState : State // TNm determines the datatype of the name (key)
     {
 
         private DocBotFSM fsm;
         
-        public DiagnoseBotState(DocBotFSM fsm, TNm typeName, GenericState<TNm> stateManager) : base(stateManager, typeName) 
+        public DiagnoseBotState(DocBotFSM fsm, string typeName, GenericStateManager stateManager) : base(stateManager, typeName) 
         // these variables are assigned
         // in the super class' variables that we can access (as protected and public vars)
         {
@@ -27,10 +27,10 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
             fsm.UpdateDocBotText( GetTypeName().ToString());
 
-            fsm.BrokenBotLocation.docBotDetails.docBotHardware.DiagnoseIssue(fsm.docBotId,
+            fsm.BrokenBotDetails.docBotHardware.DiagnoseIssue(fsm.docBotId,
                 fsm.BrokenBotLocation.name, DocBotFSM.DocBotTypes.DIAGNOSE_BOT);
 
-            fsm.StartCoroutine(fsm.ChangeDelayedState(DocBotFSM.DocBotTypes.REPAIR_BOT));
+            fsm.StartCoroutine(fsm.ChangeDelayedState("REPAIR_BOT"));
 
         }
 

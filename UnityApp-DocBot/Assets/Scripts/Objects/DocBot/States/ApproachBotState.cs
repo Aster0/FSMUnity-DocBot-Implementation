@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using FSM;
 using UnityEngine;
 
-namespace Objects.DocBot.States.BrokenState // PROPER HIERARCHY (Stores all of DocBot's states)
+namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's states)
 {
     
-    public class ApproachState<TNm> : State<TNm> // TNm determines the datatype of the name (key)
+    public class ApproachState : State // TNm determines the datatype of the name (key)
     {
 
         private DocBotFSM fsm;
         
-        public ApproachState(DocBotFSM fsm, TNm typeName, GenericState<TNm> stateManager) : base(stateManager, typeName) 
+        public ApproachState(DocBotFSM fsm, string typeName, GenericStateManager stateManager) : base(stateManager, typeName) 
         // these variables are assigned
         // in the super class' variables that we can access (as protected and public vars)
         {
@@ -37,16 +37,31 @@ namespace Objects.DocBot.States.BrokenState // PROPER HIERARCHY (Stores all of D
         {
            
 
-            if (Vector3.Distance(fsm.transform.position, fsm.
-                    BrokenBotLocation.transform.position) <= 3) // if the tending bot is near the other bot's location already,
+            
+            RaycastHit hitInfo;
+       
+            
+      
+            Collider[] colliders = Physics.OverlapSphere(fsm.transform.position, 3); // check if its nearby
+
+            foreach (Collider collider in colliders)
             {
-                fsm.agent.isStopped = true; // we stop moving.
+                if (collider.gameObject == fsm.BrokenBotLocation.gameObject) // if the tending bot is near the other bot's location already,
+                {
+                    fsm.agent.isStopped = true; // we stop moving.
 
 
-                fsm.stateManager.ChangeState(DocBotFSM.DocBotTypes.DIAGNOSE_BOT);
-          
-                
+                    fsm.stateManager.ChangeState("DIAGNOSE_BOT");
+
+
+                    break; // found the target, break out of iteration to save memory.
+                }
             }
+
+     
+     
+            
+            
         }
 
 

@@ -7,12 +7,12 @@ using UnityEngine;
 namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's states)
 {
     
-    public class BrokenState<TNm> : State<TNm> // TNm determines the datatype of the name (key)
+    public class BrokenState : State // TNm determines the datatype of the name (key)
     {
 
         private DocBotFSM fsm;
         
-        public BrokenState(DocBotFSM fsm, TNm typeName, GenericState<TNm> stateManager) : base(stateManager, typeName) 
+        public BrokenState(DocBotFSM fsm, string typeName, GenericStateManager stateManager) : base(stateManager, typeName) 
         // these variables are assigned
         // in the super class' variables that we can access (as protected and public vars)
         {
@@ -28,6 +28,11 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
             
             base.Enter();
             
+            
+            
+            fsm.StopCarryingBot();
+            
+            
             fsm.ChangeColor(Color.red); // red for broken
 
             fsm.agent.isStopped = true; // stop the agent from moving immediately. 
@@ -38,7 +43,9 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
             DocBotsManager.Instance.docBotsAlive -= 1; // minus one to the total alive.
 
 
-            fsm.RemoveBrokenBot();
+        
+            
+            // when another doc-bot repairs this broken bot, then it comes out of this state.
          
         }
 

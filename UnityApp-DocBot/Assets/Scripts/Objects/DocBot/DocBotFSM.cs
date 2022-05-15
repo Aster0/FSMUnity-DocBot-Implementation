@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using FSM;
 using Objects.DocBot.States;
-using Objects.DocBot.States.BrokenState;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Serialization;
@@ -13,9 +13,17 @@ using Random = UnityEngine.Random;
 
 namespace Objects.DocBot // PROPER HIERARCHY
 {
-    public class DocBotFSM : MonoBehaviour
+    public class DocBotFSM : GenericStateManager
     {
 
+        
+        public DocBotFSM ReturnStateMachine()
+        {
+
+
+            return this; // return this instance
+            
+        }
 
    
         public string docBotId;
@@ -41,13 +49,25 @@ namespace Objects.DocBot // PROPER HIERARCHY
 
         private MeshRenderer _renderer;
         
-        public DocBotFSM BrokenBotLocation { get; set; } // save the broken bot FSM that we are going to repair
-        
+        public GenericStateManager BrokenBotLocation { get; set; } // save the broken bot FSM that we are going to repair
+
+        public DocBotDetails BrokenBotDetails { get; set; } // holds the broken bot information that the docbot can read
+
+        private void Awake()
+        {
+            stateManager = this; // this instance of generic state manager
+        }
+
         private void Start()
         {
             agent = GetComponent<NavMeshAgent>(); // let's get the NavMeshAgent from the current game object.
             _renderer = GetComponent<MeshRenderer>();
+
+            docBotDetails = gameObject.AddComponent<DocBotDetails>();
             
+   
+            
+    
             docBotDetails.docBotSupplies.StartAmountResupply(); // resupply on start so the bot has all the components
            
             
@@ -90,13 +110,13 @@ namespace Objects.DocBot // PROPER HIERARCHY
         }
     
     
-        public GenericState<DocBotTypes> stateManager { get; } = new GenericState<DocBotTypes>();
+        public GenericStateManager stateManager { get; set; }
         // get a new instance of the generic state for this DocBotFSM to manage.
         // getter only, as we only
         // need to get the instance, not set it as it's already been initialized as a new instance when this FSM script begins.
     
         
-        public IEnumerator ChangeDelayedState(DocBotTypes state)
+        public IEnumerator ChangeDelayedState(string state)
         {
      
 
@@ -105,7 +125,7 @@ namespace Objects.DocBot // PROPER HIERARCHY
             // so it's more realistic as diagnostics doesn't take instantly in real life.
 
  
-            if (stateManager.GetCurrentStateName() != DocBotTypes.BROKEN) // make sure when after we wait 2 seconds, the state didnt change to broken.
+            if (!stateManager.GetCurrentStateName().Equals("BROKEN")) // make sure when after we wait 2 seconds, the state didnt change to broken.
             // if not, we don't want to change state anymore.
             {
                 stateManager.ChangeState(state);
@@ -116,56 +136,56 @@ namespace Objects.DocBot // PROPER HIERARCHY
         
         private void LoadAllStates()
         {
-            stateManager.AddState(DocBotTypes.WANDER, new WanderState<DocBotTypes>(this, 
-                DocBotTypes.WANDER, stateManager));
+            stateManager.AddState("WANDER", new WanderState(this, 
+                "WANDER", stateManager));
             
-            stateManager.AddState(DocBotTypes.BROKEN, new BrokenState<DocBotTypes>(this, 
-                DocBotTypes.BROKEN, stateManager));
+            stateManager.AddState("BROKEN", new BrokenState(this, 
+                "BROKEN", stateManager));
             
-            stateManager.AddState(DocBotTypes.APPROACH_BOT, new ApproachState<DocBotTypes>(this, 
-                DocBotTypes.APPROACH_BOT, stateManager));
-            
-                        
-            stateManager.AddState(DocBotTypes.DIAGNOSE_BOT, new DiagnoseBotState<DocBotTypes>(this, 
-                DocBotTypes.DIAGNOSE_BOT, stateManager));
-            
-            stateManager.AddState(DocBotTypes.REPAIR_BOT, new RepairBotState<DocBotTypes>(this, 
-                DocBotTypes.REPAIR_BOT, stateManager));
-            
-            stateManager.AddState(DocBotTypes.RETURN_SUPPLY, new ReturnSupplyState<DocBotTypes>(this, 
-                DocBotTypes.RETURN_SUPPLY, stateManager));
+            stateManager.AddState("APPROACH_BOT", new ApproachState(this, 
+                "APPROACH_BOT", stateManager));
             
                         
-            stateManager.AddState(DocBotTypes.RESUPPLY_MATERIALS, new ResupplyMaterialsState<DocBotTypes>(this, 
-                DocBotTypes.RESUPPLY_MATERIALS, stateManager));
+            stateManager.AddState("DIAGNOSE_BOT", new DiagnoseBotState(this, 
+                "DIAGNOSE_BOT", stateManager));
             
-            stateManager.AddState(DocBotTypes.RETURN_BOT_LOCATION, new ReturnBotLocationState<DocBotTypes>(this, 
-                DocBotTypes.RETURN_BOT_LOCATION, stateManager));
+            stateManager.AddState("REPAIR_BOT", new RepairBotState(this, 
+                "REPAIR_BOT", stateManager));
             
-            stateManager.AddState(DocBotTypes.RETURN_WORKSHOP, new ReturnWorkshopState<DocBotTypes>(this, 
-                DocBotTypes.RETURN_WORKSHOP, stateManager));
+            stateManager.AddState("RETURN_SUPPLY", new ReturnSupplyState(this, 
+                "RETURN_SUPPLY", stateManager));
             
-            stateManager.AddState(DocBotTypes.MACHINE_REPAIR, new MachineRepairState<DocBotTypes>(this, 
-                DocBotTypes.MACHINE_REPAIR, stateManager));
+                        
+            stateManager.AddState("RESUPPLY_MATERIALS", new ResupplyMaterialsState(this, 
+                "RESUPPLY_MATERIALS", stateManager));
             
-            stateManager.AddState(DocBotTypes.PLACE_BOT, new PlaceBotState<DocBotTypes>(this, 
-                DocBotTypes.PLACE_BOT, stateManager));
+            stateManager.AddState("RETURN_BOT_LOCATION", new ReturnBotLocationState(this, 
+                "RETURN_BOT_LOCATION", stateManager));
             
+            stateManager.AddState("RETURN_WORKSHOP", new ReturnWorkshopState(this, 
+                "RETURN_WORKSHOP", stateManager));
             
-            stateManager.AddState(DocBotTypes.DISMANTLE_BOT, new DismantleBotState<DocBotTypes>(this, 
-                DocBotTypes.DISMANTLE_BOT, stateManager));
+            stateManager.AddState("MACHINE_REPAIR", new MachineRepairState(this, 
+                "MACHINE_REPAIR", stateManager));
             
-            stateManager.AddState(DocBotTypes.RETURN_RECYCLE, new ReturnRecycleState<DocBotTypes>(this, 
-                DocBotTypes.RETURN_RECYCLE, stateManager));
-            
-            stateManager.AddState(DocBotTypes.RECYCLE_BOT, new RecycleBotState<DocBotTypes>(this, 
-                DocBotTypes.RECYCLE_BOT, stateManager));
-            
-            stateManager.AddState(DocBotTypes.DESTROYED, new DestroyedState<DocBotTypes>(this, 
-                DocBotTypes.DESTROYED, stateManager));
+            stateManager.AddState("PLACE_BOT", new PlaceBotState(this, 
+                "PLACE_BOT", stateManager));
             
             
-            stateManager.ChangeState(DocBotTypes.WANDER);
+            stateManager.AddState("DISMANTLE_BOT", new DismantleBotState(this, 
+                "DISMANTLE_BOT", stateManager));
+            
+            stateManager.AddState("RETURN_RECYCLE", new ReturnRecycleState(this, 
+                "RETURN_RECYCLE", stateManager));
+            
+            stateManager.AddState("RECYCLE_BOT", new RecycleBotState(this, 
+                "RECYCLE_BOT", stateManager));
+            
+            stateManager.AddState("DESTROYED", new DestroyedState(this, 
+                "DESTROYED", stateManager));
+            
+            
+            stateManager.ChangeState("WANDER");
         }
         
 
@@ -184,10 +204,10 @@ namespace Objects.DocBot // PROPER HIERARCHY
 
             if (cooldownDestroy < 0) // cooldown for destroy so it doesn't always check for the range.
             {
-                if (Random.Range(0, 100) < 10 && stateManager.GetCurrentStateName() != DocBotTypes.BROKEN) //  10% chance to break (rare chance) and is not alr broken
+                if (Random.Range(0, 100) < 10 && !stateManager.GetCurrentStateName().Equals("BROKEN")) //  10% chance to break (rare chance) and is not alr broken
                 {
                     if(DocBotsManager.Instance.docBotsAlive != 1) // if there are more than 1 currently alive doc bots. essentially telling it to not kill the last doc bot.
-                        stateManager.ChangeState(DocBotTypes.BROKEN);
+                        stateManager.ChangeState("BROKEN");
                 }
 
                 cooldownDestroy = 5f; // every 5 seconds, it'll have a random chance of being destroyed.
@@ -195,17 +215,17 @@ namespace Objects.DocBot // PROPER HIERARCHY
             }
 
 
-            if (docBotDetails.docBotHardware.DurabilityReduce(Time.deltaTime) <= 15 &&
-                stateManager.GetCurrentStateName() != DocBotTypes.MACHINE_REPAIR 
-                && stateManager.GetCurrentStateName() != DocBotTypes.RETURN_WORKSHOP 
-                &&  stateManager.GetCurrentStateName() != DocBotTypes.BROKEN &&
-                stateManager.GetCurrentStateName() != DocBotTypes.DESTROYED) // reduce durability each time.
-                                                                          // and check if its under 15%
+            if (docBotDetails.docBotHardware.DurabilityReduce(Time.deltaTime) <= docBotDetails.docBotHardware.durabilityToRepairAt &&
+                !stateManager.GetCurrentStateName().Equals("MACHINE_REPAIR")
+                && !stateManager.GetCurrentStateName().Equals("RETURN_WORKSHOP")
+                &&  !stateManager.GetCurrentStateName().Equals("BROKEN") &&
+                !stateManager.GetCurrentStateName().Equals("DESTROYED")) // reduce durability each time.
+                                                                          // and check if its under 10% (docBotDetails.docBotHardware.durabilityToRepairAt)
                                                                           // and make sure it isnt already charging and not broken and not being destroyed.
             {
-                // if so, we change to charging state. THIS WORKS FOR ANY STATE
+                // if so, we change to return workshop state. THIS WORKS FOR ANY STATE
                 
-                stateManager.ChangeState(DocBotTypes.RETURN_WORKSHOP); // return to charger.
+                stateManager.ChangeState("RETURN_WORKSHOP"); // return to workshop.
             }
         
         }
@@ -231,7 +251,8 @@ namespace Objects.DocBot // PROPER HIERARCHY
         {
             if (BrokenBotLocation != null) // double check if its targeting a broken bot
             {
-                BrokenBotLocation.agent.isStopped = true; // make sure its stopped
+                
+                //BrokenBotLocation.agent.isStopped = true; // make sure its stopped
                 
                 BrokenBotLocation.transform.SetParent(this.gameObject.transform); // set the broken bot parent to this, so it follows.
 
@@ -251,10 +272,10 @@ namespace Objects.DocBot // PROPER HIERARCHY
                 // was tending to a bot when it needs charging,
 
 
-                BrokenBotLocation.docBotDetails.isTended = false; // we leave the bot untended so it can be tended
+             
+                BrokenBotDetails.isTended = false; // we leave the bot untended so it can be tended
                 // by another bot later.
                 
-                StopCarryingBot();
 
                 BrokenBotLocation = null; // reset as we're no longer tending to anything.
             }
@@ -262,15 +283,16 @@ namespace Objects.DocBot // PROPER HIERARCHY
 
         public void StopCarryingBot()
         {
-     
-            BrokenBotLocation.transform.SetParent(null); // set to no parents.
+
+            if (carryingBot)
+            {
+                BrokenBotLocation.transform.SetParent(null); // set to no parents.
+                carryingBot = false; // stop carrying
+            }
 
         }
 
-        public void DestroyThisBot()
-        {
-            Destroy(this.gameObject, 3);
-        }
+ 
     }
 
 

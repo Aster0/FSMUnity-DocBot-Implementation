@@ -6,12 +6,12 @@ using UnityEngine;
 namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's states)
 {
     
-    public class ReturnWorkshopState<TNm> : State<TNm> // TNm determines the datatype of the name (key)
+    public class ReturnWorkshopState : State // TNm determines the datatype of the name (key)
     {
 
         private DocBotFSM fsm;
         
-        public ReturnWorkshopState(DocBotFSM fsm, TNm typeName, GenericState<TNm> stateManager) : base(stateManager, typeName) 
+        public ReturnWorkshopState(DocBotFSM fsm, string typeName, GenericStateManager stateManager) : base(stateManager, typeName) 
         // these variables are assigned
         // in the super class' variables that we can access (as protected and public vars)
         {
@@ -29,8 +29,11 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
             fsm.agent.isStopped = false; // make sure it can move
             
             fsm.UpdateDocBotText( GetTypeName().ToString());
-    
-            fsm.RemoveBrokenBot();
+
+            if (fsm.docBotDetails.docBotHardware.durability <= fsm.docBotDetails.docBotHardware.durabilityToRepairAt) // need to repair itself
+            {
+                fsm.StopCarryingBot();  // so stop carrying bot if it is carrying
+            }
             
             fsm.agent.SetDestination(fsm.workshopTransform.position); // move to the resupply area.
 
@@ -50,7 +53,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
             if (fsm.carryingBot) // if we are carrying broken bot
             {
 
-                if (fsm.BrokenBotLocation.docBotDetails.docBotHardware.totalFailure) // if its total failure broken bot
+                if (fsm.BrokenBotDetails.docBotHardware.totalFailure) // if its total failure broken bot
                 {
                     // we are actually meant to repair ourselves and not the bot, its just a coincidence
                     // that we're otw to the recycling center and this bot needs maintenance at the workshop.
@@ -70,11 +73,11 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
                 {
                     
               
-                    fsm.BrokenBotLocation.stateManager.ChangeState(DocBotFSM.DocBotTypes.MACHINE_REPAIR);
+                    fsm.BrokenBotLocation.ChangeState("MACHINE_REPAIR");
                     // we change the broken bot's state to machine_repair so it gets repaired by the machines.
                     
                     
-                    fsm.stateManager.ChangeState(DocBotFSM.DocBotTypes.PLACE_BOT);
+                    fsm.stateManager.ChangeState("PLACE_BOT");
                     // then we can  place the bot down..
                     
                     
@@ -83,7 +86,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
                 else // if we aren't carrying a broken bot, we can charge ourselves (as per FSM)
                 {
                    
-                    fsm.stateManager.ChangeState(DocBotFSM.DocBotTypes.MACHINE_REPAIR);
+                    fsm.stateManager.ChangeState("MACHINE_REPAIR");
                 }
               
             }

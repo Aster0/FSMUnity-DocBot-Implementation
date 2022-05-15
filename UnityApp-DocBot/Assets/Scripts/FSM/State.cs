@@ -3,23 +3,23 @@ using UnityEngine;
 
 namespace FSM // PROPER HIERARCHY
 {
-    public abstract class State<TNm>  // Generic abstract super class for all States to implement. generic TNm = Type Name.
+    public abstract class State  // Generic abstract super class for all States to implement. generic TNm = Type Name.
     {
 
         // PROTECTED TYPES SO ONLY HIERARCHY CLASSES (SUB CLASSES) THAT IMPLEMENT THIS SUPER CLASS
         // CAN ACCESS. AND NOT CLASSES THAT HAVE AN INSTANCE. 
         
         #region Variables
-        protected GenericState<TNm> _genericState;
+        protected GenericStateManager GenericState;
         
 
 
-        private TNm name;
+        private string name;
         #endregion
         
-        protected State(GenericState<TNm> state, TNm name)
+        protected State(GenericStateManager state, string name)
         {
-            _genericState = state;
+            GenericState = state;
 
 
             this.name = name; // this refers to this current instance's variable called name.
@@ -32,7 +32,7 @@ namespace FSM // PROPER HIERARCHY
 
 
 
-        public TNm GetTypeName() // getter for name var.
+        public string GetTypeName() // getter for name var.
         {
             return name;
         }

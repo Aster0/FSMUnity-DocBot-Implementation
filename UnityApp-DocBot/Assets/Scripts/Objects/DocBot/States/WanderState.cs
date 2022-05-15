@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's states)
 {
     
-    public class WanderState<TNm> : State<TNm> // TNm determines the datatype of the name (key)
+    public class WanderState : State // TNm determines the datatype of the name (key)
     {
 
         private DocBotFSM fsm;
@@ -26,7 +26,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
         private int randomWanderCooldown;
         
-        public WanderState(DocBotFSM fsm, TNm typeName, GenericState<TNm> stateManager) : base(stateManager, typeName) 
+        public WanderState(DocBotFSM fsm, string typeName, GenericStateManager stateManager) : base(stateManager, typeName) 
         // these variables are assigned
         // in the super class' variables that we can access (as protected and public vars)
         {
@@ -88,22 +88,28 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
             {
                 
           
-                if (collider.CompareTag("DocBot") && collider.gameObject != fsm.gameObject) // check if its not itself and it found another docbot
+                
+                // COMPARE TAG (AS LONG AS ITS A BOT AND ITS BROKEN, DOCBOT WILL TRY TO REPAIR)
+                if (collider.CompareTag("Bot") && collider.gameObject != fsm.gameObject) // check if its not itself and it found another docbot
                 {
-                    DocBotFSM targetedDocFSM = collider.gameObject.GetComponent<DocBotFSM>();
+                    GenericStateManager targetedDocFSM = collider.gameObject.GetComponent<GenericStateManager>();
 
-                    if (targetedDocFSM.stateManager.GetCurrentStateName() == DocBotFSM.DocBotTypes.BROKEN
-                        && !targetedDocFSM.docBotDetails.isTended) // check if its broken, then approach. if not dont.
+                    DocBotDetails brokenBotDetails = targetedDocFSM.GetComponent<DocBotDetails>();
+
+                    if (targetedDocFSM.GetCurrentStateName().Equals("BROKEN")
+                        && !brokenBotDetails.isTended) // check if its broken, then approach. if not dont.
                         // and check if its currently tended by another bot, if it is not, we can tend to it.
                     {
                         
-                        targetedDocFSM.docBotDetails.isTended = true;  // is being tended by this bot.
+                        brokenBotDetails.isTended = true;  // is being tended by this bot.
                         canMove = false;
                    
 
                         fsm.BrokenBotLocation = targetedDocFSM;
+                        fsm.BrokenBotDetails = brokenBotDetails;
+                        
                     
-                        fsm.stateManager.ChangeState(DocBotFSM.DocBotTypes.APPROACH_BOT);
+                        fsm.stateManager.ChangeState("APPROACH_BOT");
 
                         break; // break out and only tend to the first bot it sees
                     }

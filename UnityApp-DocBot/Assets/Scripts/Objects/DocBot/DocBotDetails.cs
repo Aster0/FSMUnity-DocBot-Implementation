@@ -8,8 +8,8 @@ using Random = UnityEngine.Random;
 namespace Objects.DocBot // PROPER HIERARCHY
 {
     
-    [Serializable] // so we can edit in the inspector and gives a new instnce without us needing to specify = new DocBotDetils();
-    public class DocBotDetails // Going to be an Object Class that is initialized by each DocBotFSM to store individual doc bot details
+    //[Serializable] // so we can edit in the inspector and gives a new instnce without us needing to specify = new DocBotDetils();
+    public class DocBotDetails : MonoBehaviour // Going to be an Object Class that is initialized by each DocBotFSM to store individual doc bot details
     {
 
 
@@ -114,7 +114,9 @@ namespace Objects.DocBot // PROPER HIERARCHY
 
         public class DocBotHardware // the internal of the doc bot, the hardware.
         {
-            private float durability = 100; // battery %% that the bot is left with.
+            public float durability = 100; // battery %% that the bot is left with.
+
+            public float durabilityToRepairAt = 10;
             
             private Dictionary<String, bool> _hardwareStatuses = new Dictionary<string, bool>();
             
@@ -290,7 +292,7 @@ namespace Objects.DocBot // PROPER HIERARCHY
                         // if no stock, we
                         // resupply.
                         
-                        fsm.stateManager.ChangeState(DocBotFSM.DocBotTypes.RETURN_SUPPLY);
+                        fsm.stateManager.ChangeState("RETURN_SUPPLY");
 
                         outOfStock = true;
                         break; // break out of iteration
@@ -342,7 +344,7 @@ namespace Objects.DocBot // PROPER HIERARCHY
                     // we swap state to returning to charger so we can carry the broken bot over.
 
                     fsm.carryingBot = true; // prompt that we will now be carrying a bot.
-                    fsm.stateManager.ChangeState(DocBotFSM.DocBotTypes.RETURN_WORKSHOP);
+                    fsm.stateManager.ChangeState("RETURN_WORKSHOP");
 
                     return false; // stop the repair because we still need to charge it before its fully fixed.
                 }
@@ -359,7 +361,7 @@ namespace Objects.DocBot // PROPER HIERARCHY
             {
                 if (totalFailure) // can't be fixed.
                 {
-                    fsm.stateManager.ChangeState(DocBotFSM.DocBotTypes.DISMANTLE_BOT); // change itself to wander as well.
+                    fsm.stateManager.ChangeState("DISMANTLE_BOT"); // change itself to wander as well.
 
                     return true; // so return true.
                 }
