@@ -69,12 +69,21 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
         private IEnumerator DoAdvancedRepairs()
         {
             yield return new WaitForSeconds(3);
-            
+
+
+            if (!fsm.GetCurrentStateName().Equals("BROKEN")) // not broken after 3 seconds
+            {
+                
+                fsm.StopCarryingBot(); // place bot, stop carrying because repairs are done.
+                
+                if(fsm.BrokenBotLocation != null)
+                    fsm.BrokenBotLocation.ChangeState("WANDER");
+                fsm.stateManager.ChangeState("WANDER");
+
+           
+            }
       
-            fsm.BrokenBotLocation.ChangeState("WANDER");
-            fsm.stateManager.ChangeState("WANDER");
-            
-            fsm.StopCarryingBot(); // place bot, stop carrying because repairs are done.
+  
         }
 
         public override void Exit()
