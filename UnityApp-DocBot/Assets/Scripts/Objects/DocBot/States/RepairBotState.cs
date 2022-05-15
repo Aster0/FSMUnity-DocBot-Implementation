@@ -41,7 +41,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
         private IEnumerator BeginRepair()
         {
             yield return new WaitForSeconds(2);
-            if (fsm.BrokenBotLocation != null) // null check
+            if (fsm.BrokenBotLocation != null && !fsm.stateManager.GetCurrentStateName().Equals("BROKEN")) // null check and not broken check
             {
                 if (fsm.BrokenBotDetails.docBotHardware.RepairIssues(fsm.name,
                         fsm.BrokenBotLocation.name, DocBotFSM.DocBotTypes.REPAIR_BOT, fsm)) // check if repair will be successful

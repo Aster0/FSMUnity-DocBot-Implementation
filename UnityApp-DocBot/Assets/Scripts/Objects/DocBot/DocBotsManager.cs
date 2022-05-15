@@ -27,7 +27,7 @@ namespace Objects.DocBot // PROPER HIERARCHY
             docBotsAlive = 0;
             foreach (DocBotFSM doc in GameObject.FindObjectsOfType<DocBotFSM>())
             {
-                if (!doc.GetCurrentStateName().Equals("BROKEN"))
+                if (!doc.GetCurrentStateName().Equals("BROKEN") && !doc.GetCurrentStateName().Equals("DESTROYED"))
                 {
                     docBotsAlive += 1;
                 }

@@ -1667,6 +1667,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8877630002597443782, guid: 59c45cf74399a014bb440aa157c6a814, type: 3}
+      propertyPath: m_Speed
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 8877630002597443783, guid: 59c45cf74399a014bb440aa157c6a814, type: 3}
       propertyPath: docBotId
       value: doc-bot-4
@@ -1752,6 +1756,10 @@ PrefabInstance:
     - target: {fileID: 4259084804390012711, guid: 59c45cf74399a014bb440aa157c6a814, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8877630002597443782, guid: 59c45cf74399a014bb440aa157c6a814, type: 3}
+      propertyPath: m_Speed
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8877630002597443783, guid: 59c45cf74399a014bb440aa157c6a814, type: 3}
       propertyPath: docBotId
@@ -2038,6 +2046,10 @@ PrefabInstance:
     - target: {fileID: 4259084804390012711, guid: 59c45cf74399a014bb440aa157c6a814, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8877630002597443782, guid: 59c45cf74399a014bb440aa157c6a814, type: 3}
+      propertyPath: m_Speed
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8877630002597443783, guid: 59c45cf74399a014bb440aa157c6a814, type: 3}
       propertyPath: docBotId
@@ -2597,6 +2609,10 @@ PrefabInstance:
     - target: {fileID: 4259084804390012711, guid: 59c45cf74399a014bb440aa157c6a814, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8877630002597443782, guid: 59c45cf74399a014bb440aa157c6a814, type: 3}
+      propertyPath: m_Speed
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8877630002597443783, guid: 59c45cf74399a014bb440aa157c6a814, type: 3}
       propertyPath: resupplyTransform
