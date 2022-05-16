@@ -35,6 +35,8 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
         public override void Update()
         {
+            fsm.MakeSureBotIsTending();
+            
             Collider[] colliders = Physics.OverlapSphere(fsm.transform.position, 3); // check if its nearby
             // raycast a sphere around a detection range and get an array of colliders
 
@@ -60,7 +62,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
         {
             base.Exit();
 
-            fsm.MakeSureBotIsTending();
+           
 
         }
 

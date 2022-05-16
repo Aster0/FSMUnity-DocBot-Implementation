@@ -24,14 +24,22 @@ namespace Objects.DocBot // PROPER HIERARCHY
 
         public void Update()
         {
-            docBotsAlive = 0;
-            foreach (DocBotFSM doc in GameObject.FindObjectsOfType<DocBotFSM>()) // search all objects on the scene that is a doc bot
+            try // try this code
             {
-                if (!doc.GetCurrentStateName().Equals("BROKEN") && !doc.GetCurrentStateName().Equals("DESTROYED")) // if the doc bot is not in either broken or destroy
+                docBotsAlive = 0;
+                foreach (DocBotFSM doc in GameObject.FindObjectsOfType<DocBotFSM>()) // search all objects on the scene that is a doc bot
                 {
-                    docBotsAlive += 1; // we + 1 to alive doc bots as its alive.
+                    if (!doc.GetCurrentStateName().Equals("BROKEN") && !doc.GetCurrentStateName().Equals("DESTROYED")) // if the doc bot is not in either broken or destroy
+                    {
+                        docBotsAlive += 1; // we + 1 to alive doc bots as its alive.
+                    }
                 }
             }
+            catch (Exception e)
+            {
+                 // catch an error without stopping the game.
+            }
+           
         }
     }
 }
