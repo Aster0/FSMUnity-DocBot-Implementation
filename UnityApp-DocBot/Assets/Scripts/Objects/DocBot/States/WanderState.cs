@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's states)
 {
     
-    public class WanderState : State // TNm determines the datatype of the name (key)
+    public class WanderState : State<string> // TNm determines the datatype of the name (key)
     {
 
         private DocBotFSM fsm;
@@ -26,7 +26,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
         private int randomWanderCooldown;
         
-        public WanderState(DocBotFSM fsm, string typeName, GenericStateManager stateManager) : base(stateManager, typeName) 
+        public WanderState(DocBotFSM fsm, string typeName, GenericStateManager<string> stateManager) : base(stateManager, typeName) 
         // these variables are assigned
         // in the super class' variables that we can access (as protected and public vars)
         {
@@ -80,6 +80,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
 
             Collider[] colliders = Physics.OverlapSphere(fsm.transform.position, fsm.detectionRange);
+            // raycast a sphere around a detection range and get an array of colliders
 
 
             
@@ -92,7 +93,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
                 // COMPARE TAG (AS LONG AS ITS A BOT AND ITS BROKEN, DOCBOT WILL TRY TO REPAIR)
                 if (collider.CompareTag("Bot") && collider.gameObject != fsm.gameObject) // check if its not itself and it found another docbot
                 {
-                    GenericStateManager targetedDocFSM = collider.gameObject.GetComponent<GenericStateManager>();
+                    GenericStateManager<string> targetedDocFSM = collider.gameObject.GetComponent<GenericStateManager<string>>();
 
                     DocBotDetails brokenBotDetails = targetedDocFSM.GetComponent<DocBotDetails>();
                     

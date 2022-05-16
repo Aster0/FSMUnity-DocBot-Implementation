@@ -7,12 +7,12 @@ using UnityEngine;
 
 namespace Objects.RandomBot.States // PROPER HIERARCHY (Stores all of DocBot's states)
 {
-    public class BrokenState : State // this is just an empty state for a random bot I 
+    public class BrokenState : State<string> // this is just an empty state for a random bot I 
     // made for the doc-bot to interact with. NOTHING SPECIAL
     {
         private RandomBotFSM fsm;
         
-        public BrokenState(RandomBotFSM fsm, string typeName, GenericStateManager stateManager) : base(stateManager, typeName) 
+        public BrokenState(RandomBotFSM fsm, string typeName, GenericStateManager<string> stateManager) : base(stateManager, typeName) 
         // these variables are assigned
         // in the super class' variables that we can access (as protected and public vars)
         {

@@ -6,12 +6,12 @@ using UnityEngine;
 namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's states)
 {
     
-    public class ApproachState : State // TNm determines the datatype of the name (key)
+    public class ApproachState : State<string> // TNm determines the datatype of the name (key)
     {
 
         private DocBotFSM fsm;
         
-        public ApproachState(DocBotFSM fsm, string typeName, GenericStateManager stateManager) : base(stateManager, typeName) 
+        public ApproachState(DocBotFSM fsm, string typeName, GenericStateManager<string> stateManager) : base(stateManager, typeName) 
         // these variables are assigned
         // in the super class' variables that we can access (as protected and public vars)
         {
@@ -43,6 +43,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
             
       
             Collider[] colliders = Physics.OverlapSphere(fsm.transform.position, 3); // check if its nearby
+            // raycast a sphere around a detection range and get an array of colliders
 
             foreach (Collider collider in colliders)
             {

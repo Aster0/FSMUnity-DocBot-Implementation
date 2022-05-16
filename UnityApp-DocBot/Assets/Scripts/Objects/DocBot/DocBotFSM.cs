@@ -13,20 +13,12 @@ using Random = UnityEngine.Random;
 
 namespace Objects.DocBot // PROPER HIERARCHY
 {
-    public class DocBotFSM : GenericStateManager // extending GenericStateManager so DocBotFSM can be classified under GenericStateManager datatype. Makes it easier for us to detect bots that can be repaired.
+    public class DocBotFSM : GenericStateManager<string> // extending GenericStateManager so DocBotFSM can be classified under GenericStateManager datatype. Makes it easier for us to detect bots that can be repaired.
     // extending also creates a new instance of GenericStateManager, thus, all specific FSM will tie to a new instance of the GenericStateManager.
     {
 
+        #region Variables
         
-        public DocBotFSM ReturnStateMachine()
-        {
-
-
-            return this; // return this instance
-            
-        }
-
-   
         public string docBotId;
 
         public Transform resupplyTransform, recyclingTransform, workshopTransform;
@@ -50,10 +42,13 @@ namespace Objects.DocBot // PROPER HIERARCHY
 
         private MeshRenderer _renderer;
         
-        public GenericStateManager BrokenBotLocation { get; set; } // save the broken bot FSM that we are going to repair
+        public GenericStateManager<string> BrokenBotLocation { get; set; } // save the broken bot FSM that we are going to repair
 
         public DocBotDetails BrokenBotDetails { get; set; } // holds the broken bot information that the docbot can read
 
+        #endregion
+        
+        
         private void Awake()
         {
             stateManager = this; // this instance of generic state manager
@@ -111,7 +106,7 @@ namespace Objects.DocBot // PROPER HIERARCHY
         }
     
     
-        public GenericStateManager stateManager { get; set; }
+        public GenericStateManager<string> stateManager { get; set; }
         // get a new instance of the generic state for this DocBotFSM to manage.
         // getter only, as we only
         // need to get the instance, not set it as it's already been initialized as a new instance when this FSM script begins.
@@ -253,14 +248,14 @@ namespace Objects.DocBot // PROPER HIERARCHY
 
         public void ChangeColor(Color color)
         {
-            _renderer.material.color = color;
+            _renderer.material.color = color; // change color of the render object
         }
         public void UpdateDocBotText(string currentStateType)
         {
-            headerText.text = docBotId + " : " + currentStateType;
+            headerText.text = docBotId + " : " + currentStateType; // update the text ui
         }
         
-        void OnDrawGizmosSelected()
+        void OnDrawGizmosSelected() // for debugging to see how big the detection range of the docbots are
         {
             Gizmos.DrawWireSphere(transform.position, detectionRange);
         }

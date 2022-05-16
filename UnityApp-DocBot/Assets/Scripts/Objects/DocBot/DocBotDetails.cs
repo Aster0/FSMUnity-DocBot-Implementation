@@ -327,7 +327,7 @@ namespace Objects.DocBot // PROPER HIERARCHY
                     
                     
                     
-                    Debug.Log( state + ": " + _determinedHardwareFailures[key].Replace(
+                    Debug.Log( botName + " - " + state + ": " + _determinedHardwareFailures[key].Replace(
                         "%botname%", botName)
                         .Replace("%targeted_botname%", targetedBot)); // print the repair messages
                                                     // replacing t he placeholder with the repairing botname's name.

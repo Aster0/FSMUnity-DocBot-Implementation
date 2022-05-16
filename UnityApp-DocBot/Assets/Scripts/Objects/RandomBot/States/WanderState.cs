@@ -7,7 +7,7 @@ using UnityEngine.AI;
 
 namespace Objects.RandomBot.States // PROPER HIERARCHY (Stores all of DocBot's states)
 {
-    public class WanderState : State // this is just an empty state for a random bot I 
+    public class WanderState : State<string> // this is just an empty state for a random bot I 
         // made for the doc-bot to interact with. NOTHING SPECIAL 
     // THE WANDER STATE DOES NOTYHING EXCEPT TO DESTROY THE RANDOM BOT AFTER ITS BEING REPAIRED BY THE MAIN AGENT
     // WHICH IS THE DOC BOT!
@@ -17,7 +17,7 @@ namespace Objects.RandomBot.States // PROPER HIERARCHY (Stores all of DocBot's s
 
 
         
-        public WanderState(RandomBotFSM fsm, string typeName, GenericStateManager stateManager) : base(stateManager, typeName) 
+        public WanderState(RandomBotFSM fsm, string typeName, GenericStateManager<string> stateManager) : base(stateManager, typeName) 
         // these variables are assigned
         // in the super class' variables that we can access (as protected and public vars)
         {

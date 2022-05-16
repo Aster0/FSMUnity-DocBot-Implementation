@@ -1763,7 +1763,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8877630002597443783, guid: 59c45cf74399a014bb440aa157c6a814, type: 3}
       propertyPath: docBotId
-      value: doc-bot-2
+      value: doc-bot-3
       objectReference: {fileID: 0}
     - target: {fileID: 8877630002597443783, guid: 59c45cf74399a014bb440aa157c6a814, type: 3}
       propertyPath: chargingMove
@@ -2053,7 +2053,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8877630002597443783, guid: 59c45cf74399a014bb440aa157c6a814, type: 3}
       propertyPath: docBotId
-      value: doc-bot-3
+      value: doc-bot-2
       objectReference: {fileID: 0}
     - target: {fileID: 8877630002597443783, guid: 59c45cf74399a014bb440aa157c6a814, type: 3}
       propertyPath: chargingMove

@@ -6,12 +6,13 @@ using UnityEngine;
 namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's states)
 {
     
-    public class MachineRepairState : State // TNm determines the datatype of the name (key)
+    public class MachineRepairState : State<string> // TNm determines the datatype of the name (key)
     {
 
         private DocBotFSM fsm;
+        private bool doingAdvancedRepairs;
         
-        public MachineRepairState(DocBotFSM fsm, string typeName, GenericStateManager stateManager) : base(stateManager, typeName) 
+        public MachineRepairState(DocBotFSM fsm, string typeName, GenericStateManager<string> stateManager) : base(stateManager, typeName) 
         // these variables are assigned
         // in the super class' variables that we can access (as protected and public vars)
         {
@@ -25,7 +26,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
             
             Debug.Log(fsm.docBotId + " - " + DocBotFSM.DocBotTypes.MACHINE_REPAIR + ": is using the machines in the workshop to either do maintenance on itself or advanced repairs on a broken bot.");
 
-            
+            doingAdvancedRepairs = false;
             fsm.UpdateDocBotText( GetTypeName().ToString());
             
          
@@ -43,8 +44,9 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
             {
                 
 
-                if (fsm.carryingBot) // if carrying bot to do advanced repairs at the workshop,
+                if (fsm.carryingBot && !doingAdvancedRepairs) // if carrying bot to do advanced repairs at the workshop,
                 {
+                    doingAdvancedRepairs = true;
                     fsm.StartCoroutine(DoAdvancedRepairs());
                 }
                 else // if not, maintenance on itself by increasing its own durability so it doesn't break that easily.

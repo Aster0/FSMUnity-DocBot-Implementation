@@ -7,12 +7,12 @@ using UnityEngine;
 namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's states)
 {
     
-    public class BrokenState : State // TNm determines the datatype of the name (key)
+    public class BrokenState : State<string> // TNm determines the datatype of the name (key)
     {
 
         private DocBotFSM fsm;
         
-        public BrokenState(DocBotFSM fsm, string typeName, GenericStateManager stateManager) : base(stateManager, typeName) 
+        public BrokenState(DocBotFSM fsm, string typeName, GenericStateManager<string> stateManager) : base(stateManager, typeName) 
         // these variables are assigned
         // in the super class' variables that we can access (as protected and public vars)
         {
