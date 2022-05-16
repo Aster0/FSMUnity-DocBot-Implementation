@@ -53,7 +53,15 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
         public override void Update()
         {
-            // do nothing on broken
+            // make sure that if it was previously tending a broken bot, it successfully left it untended as this bot broke
+            if (fsm.BrokenBotLocation != null) // if we are tending to a broken bot
+            {
+                fsm.BrokenBotDetails.isTended = false; // we leave the bot untended so it can be tended
+                // by another bot later.
+
+                fsm.BrokenBotLocation = null;
+            }
+
         }
 
         public override void Exit()

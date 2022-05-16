@@ -30,18 +30,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
             
             fsm.UpdateDocBotText( GetTypeName().ToString());
 
-            if (fsm.docBotDetails.docBotHardware.durability <= fsm.docBotDetails.docBotHardware.durabilityToRepairAt) // need to repair itself
-            {
-                
-                if(fsm.BrokenBotLocation != null) // if we are tending to a broken bot
-                    fsm.BrokenBotDetails.isTended = false; // we leave the bot untended so it can be tended
-                // by another bot later.
-                
-                fsm.StopCarryingBot();  // so stop carrying bot if it is carrying
-                
-       
-              
-            }
+  
             
             fsm.agent.SetDestination(fsm.workshopTransform.position); // move to the resupply area.
 

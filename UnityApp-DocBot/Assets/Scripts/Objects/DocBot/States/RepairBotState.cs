@@ -41,7 +41,8 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
         private IEnumerator BeginRepair()
         {
             yield return new WaitForSeconds(2);
-            if (fsm.BrokenBotLocation != null && !fsm.stateManager.GetCurrentStateName().Equals("BROKEN")) // null check and not broken check
+            if (fsm.BrokenBotLocation != null && !fsm.stateManager.GetCurrentStateName().Equals("BROKEN") 
+                                              && !fsm.stateManager.GetCurrentStateName().Equals("RETURN_WORKSHOP")) // null check and not broken check and not returning to workshop after yielding
             {
                 if (fsm.BrokenBotDetails.docBotHardware.RepairIssues(fsm.name,
                         fsm.BrokenBotLocation.name, DocBotFSM.DocBotTypes.REPAIR_BOT, fsm)) // check if repair will be successful
@@ -62,7 +63,8 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
             yield return new WaitForSeconds(3);
 
-            if (!fsm.stateManager.GetCurrentStateName().Equals("BROKEN")) // make sure when after we wait 2 seconds, the state didnt change to broken.
+            if (!fsm.stateManager.GetCurrentStateName().Equals("BROKEN")
+                && !fsm.stateManager.GetCurrentStateName().Equals("RETURN_WORKSHOP")) // make sure when after we wait 2 seconds, the state didnt change to broken or return workshop.
                 // if not, we don't want to change state anymore.
             {
                 fsm.BrokenBotLocation.ChangeState("WANDER");

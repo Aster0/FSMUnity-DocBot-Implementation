@@ -36,7 +36,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
         public override void Update()
         {
-           
+            fsm.MakeSureBotIsTending();
         }
 
         public override void Exit()

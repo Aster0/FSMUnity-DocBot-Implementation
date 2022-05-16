@@ -343,14 +343,14 @@ namespace Objects.DocBot // PROPER HIERARCHY
 
                 
 
-                if (brokenBattery) // if the broke nbot needs to be charged
+                if (brokenBattery) // if the broke bot needs the battery to be repaired
                 {
                     // we swap state to returning to charger so we can carry the broken bot over.
 
                     fsm.carryingBot = true; // prompt that we will now be carrying a bot.
                     fsm.stateManager.ChangeState("RETURN_WORKSHOP");
 
-                    return false; // stop the repair because we still need to charge it before its fully fixed.
+                    return false; // stop the repair because we still need to go to the workshop to have the battery fully fixed before fix is success.
                 }
 
 

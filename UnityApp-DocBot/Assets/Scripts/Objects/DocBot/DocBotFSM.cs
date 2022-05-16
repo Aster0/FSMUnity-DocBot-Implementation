@@ -239,6 +239,14 @@ namespace Objects.DocBot // PROPER HIERARCHY
             {
                 // if so, we change to return workshop state. THIS WORKS FOR ANY STATE
                 
+               
+                
+                if(BrokenBotLocation != null) // if we are tending to a broken bot
+                    BrokenBotDetails.isTended = false; // we leave the bot untended so it can be tended
+                // by another bot later.
+                
+                StopCarryingBot();  // so stop carrying bot if it is carrying
+                
                 stateManager.ChangeState("RETURN_WORKSHOP"); // return to workshop.
             }
         
@@ -294,6 +302,7 @@ namespace Objects.DocBot // PROPER HIERARCHY
                 BrokenBotLocation = null; // reset as we're no longer tending to anything.
             }
         }
+        
 
         public void StopCarryingBot()
         {
@@ -302,6 +311,8 @@ namespace Objects.DocBot // PROPER HIERARCHY
             {
                 BrokenBotLocation.transform.SetParent(null); // set to no parents.
           
+                
+                Debug.Log("WORKSHOP MAINTENANCE");
           
                 BrokenBotLocation = null; // reset as we're no longer tending to anything.
                 
@@ -310,6 +321,15 @@ namespace Objects.DocBot // PROPER HIERARCHY
        
             }
 
+        }
+
+
+        public void MakeSureBotIsTending() // to make sure the targeted broken bot is being tended.
+        {
+            if (BrokenBotLocation != null)
+            {
+                BrokenBotDetails.isTended = true;
+            }
         }
 
  

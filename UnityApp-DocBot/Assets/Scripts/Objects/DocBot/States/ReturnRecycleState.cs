@@ -39,6 +39,8 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
         public override void Update()
         {
             
+            fsm.MakeSureBotIsTending();
+            
             if (fsm.carryingBot) // if we are carrying broken bot
             {
                 fsm.CarryTargetBot(); // carry the bot

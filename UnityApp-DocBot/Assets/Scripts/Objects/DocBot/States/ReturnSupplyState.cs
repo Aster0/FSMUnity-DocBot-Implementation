@@ -37,6 +37,8 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
         public override void Update()
         {
+
+            fsm.MakeSureBotIsTending();
             
             if (Vector3.Distance(fsm.transform.position, fsm.resupplyTransform.position) < 3) // if its nearby 
             {

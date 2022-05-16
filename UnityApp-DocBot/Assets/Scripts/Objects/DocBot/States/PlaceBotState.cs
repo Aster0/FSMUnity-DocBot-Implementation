@@ -30,6 +30,10 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
             
          
             
+
+            if(fsm.BrokenBotLocation != null) // null check
+                fsm.BrokenBotLocation.transform.SetParent(null); // set to no parents. - place down bot.
+            
             fsm.stateManager.ChangeState("MACHINE_REPAIR");
             // after placing bot down, we go back to wandering..
             
@@ -41,7 +45,7 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
         public override void Update()
         {
-            // do nothing on broken
+            // do nothing on place
         }
 
         public override void Exit()
