@@ -28,13 +28,16 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
             
             fsm.UpdateDocBotText( GetTypeName().ToString());
 
-            fsm.agent.SetDestination(fsm.BrokenBotLocation.transform.position);
+          
 
 
         }
 
         public override void Update()
         {
+            if(fsm.BrokenBotLocation != null) // null check
+                fsm.agent.SetDestination(fsm.BrokenBotLocation.transform.position); // keep updating broken bot location as it might be pushed off course by other bots
+            
             fsm.MakeSureBotIsTending();
             
             Collider[] colliders = Physics.OverlapSphere(fsm.transform.position, 3); // check if its nearby
@@ -42,17 +45,23 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
 
             foreach (Collider collider in colliders)
             {
-                if (collider.gameObject ==
-                    fsm.BrokenBotLocation.gameObject) // if the tending bot is near the other bot's location already,
+                if (fsm.BrokenBotLocation != null)
                 {
-                    fsm.agent.isStopped = true; // we stop moving.
+                    if (collider.gameObject ==
+                        fsm.BrokenBotLocation.gameObject) // if the tending bot is near the other bot's location already,
+                    {
+                        fsm.agent.isStopped = true; // we stop moving.
 
 
-                    // not the same as approach as this needs to become REPAIR_BOT as it has already diagnosed.
+                        // not the same as approach as this needs to become REPAIR_BOT as it has already diagnosed.
                 
-                    // just needed to resupply and continue repairing after.
-                    fsm.stateManager.ChangeState("REPAIR_BOT");
+                        // just needed to resupply and continue repairing after.
+                        fsm.stateManager.ChangeState("REPAIR_BOT");
+
+                        break; // break out of the iteration as its found the bot's location again
+                    }
                 }
+               
             }
             
 

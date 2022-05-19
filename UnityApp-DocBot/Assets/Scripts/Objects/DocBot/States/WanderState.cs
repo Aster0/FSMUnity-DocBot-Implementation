@@ -104,8 +104,8 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
                     // generic state manager to change its state, thus, repairing it when needed.
 
                     if (targetedDocFSM.GetCurrentStateName().Equals("BROKEN")
-                        && !brokenBotDetails.isTended) // check if its broken, then approach. if not dont.
-                        // and check if its currently tended by another bot, if it is not, we can tend to it.
+                        && !brokenBotDetails.isTended && targetedDocFSM.transform.parent == null) // check if its broken, then approach. if not dont.
+                        // and check if its currently tended by another bot, if it is not, we can tend to it. and no parents, so not being carried by anything.
                     {
                         
                         brokenBotDetails.isTended = true;  // is being tended by this bot.

@@ -208,6 +208,7 @@ namespace Objects.DocBot // PROPER HIERARCHY
         {
             stateManager.StateUpdate(); // Update the current state using the Generic State's instance (specific to this FSM)
 
+           
 
             // BELOW WORKS FOR ANY STATES. BROKEN AND CHARGING BECAUSE IT CAN HAPPEN AT ANY ANY ANY STATE,
             // NOT JUST SPECIFIC STATES.
@@ -307,12 +308,11 @@ namespace Objects.DocBot // PROPER HIERARCHY
         public void StopCarryingBot()
         {
 
-            if (carryingBot)
+            if (carryingBot) // if its carrying a bot
             {
                 BrokenBotLocation.transform.SetParent(null); // set to no parents.
           
                 
-                Debug.Log("WORKSHOP MAINTENANCE");
           
                 BrokenBotLocation = null; // reset as we're no longer tending to anything.
                 
@@ -326,9 +326,9 @@ namespace Objects.DocBot // PROPER HIERARCHY
 
         public void MakeSureBotIsTending() // to make sure the targeted broken bot is being tended.
         {
-            if (BrokenBotLocation != null)
+            if (BrokenBotLocation != null) // if its currently alreaedy attending
             {
-                BrokenBotDetails.isTended = true;
+                BrokenBotDetails.isTended = true; // make sure tending is true
             }
         }
 

@@ -32,8 +32,9 @@ namespace Objects.DocBot.States // PROPER HIERARCHY (Stores all of DocBot's stat
             
             
 
-            fsm.BrokenBotLocation.ChangeState("DESTROYED"); // change to destroyed
-            // cos its recycled.
+            if(fsm.BrokenBotLocation != null) // null check just incase
+                fsm.BrokenBotLocation.ChangeState("DESTROYED"); // change to destroyed
+                // cos its recycled.
 
             fsm.StartCoroutine(fsm.ChangeDelayedState("WANDER")); 
             // delay to a wander state as its recycling. 

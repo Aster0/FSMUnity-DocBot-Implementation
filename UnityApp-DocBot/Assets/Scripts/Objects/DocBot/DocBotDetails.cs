@@ -336,7 +336,7 @@ namespace Objects.DocBot // PROPER HIERARCHY
                     
                 }
                 
-                if (OnTotalFailure(totalFailure, fsm)) // cheeck if total failure again after doing repairs.
+                if (OnTotalFailure(totalFailure, fsm) && !outOfStock) // cheeck if total failure again after doing repairs and not out of stock, so not going resupply,
                 {
                     return false; // false means repair failed.
                 }
